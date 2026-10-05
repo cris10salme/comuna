@@ -3,7 +3,7 @@
   --ink-2: #1c1a18;
   --ink-3: #2a2724;
   --orange: #f2701d;
-  --orange-dark: #c9550c;
+  --orange-dark: #a3420a; /* naranja para texto sobre crema (contraste AA) */
   --cream: #f5efe6;
   --cream-2: #e9e0d2;
   --muted: #a39a8e;
@@ -206,6 +206,9 @@ button {
 }
 .tabs__link {
   flex: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
   text-decoration: none;
   font-weight: 600;
   font-size: 14px;
@@ -673,7 +676,7 @@ button {
 .footer__brand {
   font-family: var(--display);
   font-size: 40px;
-  color: var(--ink-3);
+  color: var(--muted);
   line-height: 1;
 }
 
@@ -1516,7 +1519,7 @@ button {
 }
 .fs__order small {
   font-size: 12px;
-  color: rgba(42, 37, 34, 0.65);
+  color: rgba(42, 37, 34, 0.75);
 }
 .fs__head {
   display: grid;
@@ -1532,7 +1535,7 @@ button {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: rgba(42, 37, 34, 0.6);
+  color: rgba(42, 37, 34, 0.75);
 }
 .fs__name {
   font-size: 22px;
@@ -1586,7 +1589,7 @@ button {
 .designer__fineprint {
   margin: 0;
   font-size: 12px;
-  color: rgba(42, 37, 34, 0.6);
+  color: rgba(42, 37, 34, 0.75);
 }
 .designer__result {
   margin-top: 20px;
@@ -1880,4 +1883,11 @@ button {
     width: 420px;
     animation-name: side;
   }
+}
+
+/* Enlaces de texto con zona de toque cómoda */
+.footer a,
+.info__ig {
+  display: inline-block;
+  padding: 10px 4px;
 }

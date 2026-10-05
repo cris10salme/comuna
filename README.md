@@ -1,25 +1,54 @@
 # La Comuna Smash & Tacos — web
 
-Vite + React. Carta en `src/data/menu.js` (única fuente de verdad) y datos del local en `src/data/business.js`.
+Web de La Comuna Smash & Tacos (Balerma, El Ejido). Vite + React + Three.js (React Three Fiber + drei),
+con funciones serverless en `/api` para la IA. Pensada para desplegarse en Vercel.
+
+## Qué tiene
+
+- **Carta real** con comanda: el cliente arma el pedido y lo **llama** (tel:) o, si no lo cogen, lo **envía por SMS** ya escrito.
+- **Burgers en 3D**: vista previa en cada tarjeta y visor a pantalla completa (girar, zoom, despiece horizontal con la ficha de cada ingrediente).
+- **Diseña tu burger con IA** (`/api/disena`) y **asistente de la carta** (`/api/chat`), con Claude Haiku 4.5.
+- Páginas legales con datos por rellenar (busca `RELLENAR` en `src/legal.jsx`).
+
+## Estructura
+
+| Ruta | Qué es |
+|---|---|
+| `src/data/menu.js` | La carta (única fuente de verdad de platos y precios) |
+| `src/data/business.js` | Datos del local: teléfono, horario, dirección |
+| `src/data/catalog.js` | Productos pedibles y cálculo de precios (lo usa el chat) |
+| `src/data/ingredients.js` | Ingredientes de burger para el diseñador IA y precio orientativo |
+| `src/three/` | 3D: `layers.jsx` (capas), `recipes.js` (cada burger), `Burger.jsx` (animación), `Studio.jsx` (luz), `BurgerViewer.jsx` (vista previa), `FullscreenScene.jsx` (visor) |
+| `api/disena.js`, `api/chat.js` | Funciones serverless que llaman a Claude |
+| `api/_lib/` | Límite de usos y utilidades HTTP |
+
+## Desarrollo
 
 ```bash
 npm install
-npm run dev     # desarrollo
-npm run build   # genera dist/
+cp .env.example .env.local   # y rellena ANTHROPIC_API_KEY, o pon AI_MOCK=1 para probar sin gastar
+npm run dev                  # web + /api en http://localhost:5173
+npm run build                # genera dist/
 ```
 
-Páginas legales en `src/legal.jsx`: buscar `RELLENAR` y completar antes de publicar.
+## Despliegue en Vercel (gratis para la demo)
 
-Estado: fase 4 (las 9 burgers en 3D + "Diseña tu burger con IA"). Pendiente: chat, optimización móvil y despliegue.
+1. Entra en [vercel.com](https://vercel.com) con tu cuenta de GitHub → **Add New… → Project** → importa este repositorio.
+2. Vercel detecta Vite solo. No cambies nada de *Build & Output*.
+3. En **Environment Variables** añade `ANTHROPIC_API_KEY` (de [console.anthropic.com](https://console.anthropic.com)) y, si quieres, un `RATE_LIMIT_SALT` con cualquier texto aleatorio.
+4. **Deploy**. Tendrás una dirección tipo `la-comuna.vercel.app`.
+5. Recomendado: **Storage → Create → Upstash for Redis** (plan gratuito) y conéctalo al proyecto. Crea solas las variables
+   `KV_REST_API_URL` / `KV_REST_API_TOKEN`, y el límite de usos pasa a ser compartido entre todas las instancias.
+   Después, **Redeploy** para que las coja.
 
-## Diseña tu burger con IA
+Límites por defecto (se cambian con variables, ver `.env.example`): 6 diseños y 30 mensajes de chat por persona y hora,
+y 400 peticiones a la IA al día en total.
 
-- `api/disena.js`: función serverless que llama a Claude (`claude-haiku-4-5`) con salida estructurada.
-  La lista de ingredientes va como `enum` en el esquema JSON, así que la IA no puede inventar ninguno.
-- `src/data/ingredients.js`: catálogo de ingredientes de la carta, saneado de capas y precio orientativo
-  (el de la burger de la carta más parecida; lo calcula el código, nunca la IA).
-- `api/_lib/ratelimit.js`: límite por persona y hora + tope global diario. Con Upstash Redis es compartido.
-- Variables de entorno: ver `.env.example`. La API key solo existe en el servidor.
-- En local: `npm run dev` sirve también `/api`. Con `AI_MOCK=1` en `.env.local` responde sin gastar.
+> El plan gratuito de Vercel (Hobby) es para uso no comercial: vale para enseñar la demo. Si el cliente se queda la web,
+> hay que pasar a Vercel Pro o moverla a un hosting que permita uso comercial gratis (p. ej. Netlify). El dominio propio
+> se conecta en **Settings → Domains**.
 
-3D: `src/three/` — `layers.jsx` (sistema de capas), `recipes.js` (composición de cada burger), `Burger.jsx` (animación), `Studio.jsx` (luz), `BurgerViewer.jsx` (vista previa de la carta), `FullscreenScene.jsx` (visor a pantalla completa: girar, zoom, despiece). Se carga en diferido; en equipos flojos o sin WebGL se muestra una versión 2D, y con "reducir movimiento" no gira.
+## Pendiente
+
+- Fotos reales de las burgers (opción acordada para más realismo) y logo original.
+- Datos legales del titular (`RELLENAR` en `src/legal.jsx`) y tabla de alérgenos si el local la tiene.

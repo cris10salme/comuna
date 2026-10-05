@@ -75,8 +75,10 @@ const PAGES = {
             Económico Europeo <Fill>revisar garantías de transferencia internacional vigentes</Fill>.
           </li>
           <li>
-            <strong>Alojamiento:</strong> la web está alojada en Vercel, que registra datos técnicos de acceso
-            (como la dirección IP) por seguridad y para limitar el uso abusivo del chat.
+            <strong>Alojamiento y límites de uso:</strong> la web está alojada en Vercel, que registra datos técnicos
+            de acceso (como la dirección IP) por seguridad. Para evitar el uso abusivo del asistente y del diseñador
+            con IA contamos cuántas peticiones hace cada visitante por hora, usando un resumen cifrado (hash) de la
+            IP que no permite recuperarla; el contador se borra solo a la hora.
           </li>
         </ul>
         <h2>Conservación</h2>

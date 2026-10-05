@@ -14,7 +14,7 @@ function useNearViewport(ref) {
     const el = ref.current
     if (!el) return
     if (!('IntersectionObserver' in window)) return setNear(true)
-    const io = new IntersectionObserver(([e]) => setNear(e.isIntersecting), { rootMargin: '250px 0px' })
+    const io = new IntersectionObserver(([e]) => setNear(e.isIntersecting), { rootMargin: '0px 0px 120px 0px' })
     io.observe(el)
     return () => io.disconnect()
   }, [ref])
