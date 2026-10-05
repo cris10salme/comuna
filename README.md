@@ -45,7 +45,8 @@ Límites por defecto (se cambian con variables, ver `.env.example`): 6 diseños 
 y 400 peticiones a la IA al día en total.
 
 > El plan gratuito de Vercel (Hobby) es para uso no comercial: vale para enseñar la demo. Si el cliente se queda la web,
-> hay que pasar a Vercel Pro o moverla a un hosting que permita uso comercial gratis (p. ej. Netlify). El dominio propio
+> hay que pasar a Vercel Pro o moverla a un hosting que permita uso comercial gratis (p. ej. Netlify, adaptando las
+> funciones de `/api` a su formato). El dominio propio
 > se conecta en **Settings → Domains**.
 
 ## Pendiente
