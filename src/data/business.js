@@ -20,7 +20,6 @@ export const BUSINESS = {
   closes: '23:30',
   timeZone: 'Europe/Madrid',
   deliveryArea: 'Balerma',
-  halalMeat: true,
 }
 
 export const telHref = `tel:${BUSINESS.phoneE164}`

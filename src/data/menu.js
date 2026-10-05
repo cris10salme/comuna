@@ -1,6 +1,9 @@
 // Carta real de La Comuna. Única fuente de verdad: la usan la web, el 3D y la IA.
 // No añadir ingredientes ni precios que no estén en la carta del local.
 
+// Todas las carnes se sirven normales o, a elección del cliente, halal (mismo precio).
+export const HALAL_LABEL = 'Carne halal'
+
 export const SAUCES = ['Argelina', 'Marocaine', 'Ketchup', 'Mayonesa', 'Cheddar', 'Yogur', 'Barbacoa']
 
 export const TACOS = {
@@ -98,7 +101,7 @@ export const BURGER_NOTE = 'Todas con patatas fritas'
 
 export const STARTERS = [
   { id: 'patatas-queso-bacon', name: 'Patatas queso y bacon', price: 8.5, halalOption: true },
-  { id: 'pollo-crujiente', name: 'Pollo crujiente', price: 6 },
+  { id: 'pollo-crujiente', name: 'Pollo crujiente', price: 6, halalOption: true },
   { id: 'tequenos', name: 'Tequeños', price: 7 },
   { id: 'patatas-4-salsas', name: 'Patatas con 4 salsas', price: 7.5, pickSauces: 4 },
 ]

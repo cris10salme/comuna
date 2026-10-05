@@ -4,6 +4,8 @@ import { price } from '../lib/format'
 import { itemKey, useOrder } from '../lib/order'
 import Section from './Section'
 import Chips from './Chips'
+import HalalToggle from './HalalToggle'
+import { HALAL_LABEL } from '../data/menu'
 
 function AddButton({ onAdd, label = '+' }) {
   const [added, setAdded] = useState(false)
@@ -47,12 +49,8 @@ function Line({ item, detail = [], children, disabled }) {
 function HalalLine({ item }) {
   const [halal, setHalal] = useState(false)
   return (
-    <Line item={item} detail={halal ? ['Opción halal'] : []}>
-      <label className="toggle toggle--small">
-        <input type="checkbox" checked={halal} onChange={(e) => setHalal(e.target.checked)} />
-        <span className="toggle__box" aria-hidden="true" />
-        <span>Opción halal</span>
-      </label>
+    <Line item={item} detail={halal ? [HALAL_LABEL] : []}>
+      <HalalToggle checked={halal} onChange={setHalal} small />
     </Line>
   )
 }

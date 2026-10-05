@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { TACOS } from '../data/menu'
+import { HALAL_LABEL, TACOS } from '../data/menu'
 import { money, price } from '../lib/format'
 import { itemKey, useOrder } from '../lib/order'
 import Section from './Section'
 import Chips from './Chips'
+import HalalToggle from './HalalToggle'
 
 export default function Tacos() {
   const { add } = useOrder()
@@ -12,6 +13,7 @@ export default function Tacos() {
   const [sauces, setSauces] = useState([])
   const [gratin, setGratin] = useState(null)
   const [isMenu, setIsMenu] = useState(false)
+  const [halal, setHalal] = useState(false)
   const [added, setAdded] = useState(false)
 
   const size = TACOS.sizes.find((s) => s.id === sizeId)
@@ -23,6 +25,7 @@ export default function Tacos() {
   const onAdd = () => {
     const detail = [
       chosenMeats.join(' + '),
+      ...(halal ? [HALAL_LABEL] : []),
       sauces.length ? `Salsas: ${sauces.join(', ')}` : 'Sin salsa extra',
       ...(gratin ? [`Gratinado ${gratin.toLowerCase()}`] : []),
       ...(isMenu ? [`Menú (${TACOS.menu.includes})`] : []),
@@ -66,6 +69,8 @@ export default function Tacos() {
               onChange={(v) => setMeat(i, v)}
             />
           ))}
+
+          <HalalToggle checked={halal} onChange={setHalal} small />
 
           <Chips legend="Salsas" options={TACOS.sauces} value={sauces} onChange={setSauces} multiple />
 
