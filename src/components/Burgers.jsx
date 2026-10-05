@@ -5,6 +5,7 @@ import { itemKey, useOrder } from '../lib/order'
 import Section from './Section'
 import Chips from './Chips'
 import HalalToggle from './HalalToggle'
+import BurgerStage, { hasRecipe } from './BurgerStage'
 
 function BurgerCard({ burger, index }) {
   const { add } = useOrder()
@@ -23,7 +24,8 @@ function BurgerCard({ burger, index }) {
   }
 
   return (
-    <article className="ticket burger">
+    <article className={`ticket burger ${hasRecipe(burger.id) ? 'burger--3d' : ''}`}>
+      {hasRecipe(burger.id) && <BurgerStage burgerId={burger.id} name={burger.name} />}
       <div className="ticket__top">
         <span className="ticket__num">#{String(index + 1).padStart(2, '0')}</span>
         {burger.tag && <span className="ticket__tag">{burger.tag}</span>}
