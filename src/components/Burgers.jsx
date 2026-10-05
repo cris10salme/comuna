@@ -13,19 +13,23 @@ function BurgerCard({ burger, index }) {
   const [halal, setHalal] = useState(false)
   const [added, setAdded] = useState(false)
 
+  const detail = [
+    ...(burger.chicken ? [] : [PATTY_OPTIONS.find((p) => p.id === patty).label]),
+    ...(halal ? [HALAL_LABEL] : []),
+  ]
+  const addToOrder = () => add({ key: itemKey(burger.id, detail), name: burger.name, detail, unitPrice: burger.price })
+
   const onAdd = () => {
-    const detail = [
-      ...(burger.chicken ? [] : [PATTY_OPTIONS.find((p) => p.id === patty).label]),
-      ...(halal ? [HALAL_LABEL] : []),
-    ]
-    add({ key: itemKey(burger.id, detail), name: burger.name, detail, unitPrice: burger.price })
+    addToOrder()
     setAdded(true)
     setTimeout(() => setAdded(false), 1200)
   }
 
   return (
     <article className={`ticket burger ${hasRecipe(burger.id) ? 'burger--3d' : ''}`}>
-      {hasRecipe(burger.id) && <BurgerStage burgerId={burger.id} name={burger.name} />}
+      {hasRecipe(burger.id) && (
+        <BurgerStage burger={burger} selectionLabel={detail.join(' · ') || 'normal'} onAdd={addToOrder} />
+      )}
       <div className="ticket__top">
         <span className="ticket__num">#{String(index + 1).padStart(2, '0')}</span>
         {burger.tag && <span className="ticket__tag">{burger.tag}</span>}

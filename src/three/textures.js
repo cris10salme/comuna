@@ -138,10 +138,14 @@ export function bunBottomTextures(size) {
     const a = u * Math.PI * 2
     const n = fbm(Math.cos(a) * 3 + v * 8, Math.sin(a) * 3, 11)
     if (v > 0.72) {
-      // Cara de miga, más tostada hacia el centro
-      const t = smooth(0.72, 1, v)
-      let c = mix(crumb, toasted, t * 0.7 + (n - 0.5) * 0.6)
-      return c
+      // Cara de miga: ruido evaluado en el plano (x, z) para no hacer rayos en el centro
+      const r = (1 - v) / 0.28
+      const x = Math.cos(a) * r
+      const z = Math.sin(a) * r
+      const m = fbm(x * 5 + 20, z * 5 + 20, 13)
+      const pores = fbm(x * 40 + 20, z * 40 + 20, 17, 2)
+      let c = mix(crumb, toasted, (1 - r) * 0.35 + smooth(0.45, 0.8, m) * 0.6)
+      return mix(c, hex(0xf3dcae), Math.max(0, pores - 0.6) * 1.3)
     }
     return mix(crust, hex(0x9c5a22), (n - 0.4) * 0.8)
   }, { bump: true, bumpFn: radialBump })

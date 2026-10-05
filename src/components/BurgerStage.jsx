@@ -1,40 +1,11 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { RECIPES } from '../three/recipes'
 import { graphicsTier, prefersReducedMotion } from '../lib/device'
+import FlatStack from './FlatStack'
+import BurgerFullscreen from './BurgerFullscreen'
 
 // El 3D (three.js) se descarga aparte y solo cuando hace falta: la carta aparece al instante.
 const BurgerViewer = lazy(() => import('../three/BurgerViewer'))
-
-const LAYER_COLORS = {
-  bunBottom: '#c98a43',
-  bunTop: '#b8661f',
-  patty: '#4a2412',
-  chicken: '#c98a3a',
-  cheese: '#f39a1e',
-  sauce: '#e2853a',
-  jam: '#4a1a2c',
-  lettuce: '#86b83c',
-  bacon: '#8e2a1c',
-  onionDiced: '#efe6cf',
-  onionCrispy: '#b86b22',
-  onionCaramel: '#7a3a12',
-  pickles: '#5d7a2a',
-  goatRound: '#efe9db',
-}
-
-// Versión ligera sin WebGL: la misma idea de capas con CSS.
-function FlatStack({ recipe, exploded }) {
-  const layers = [...recipe].reverse()
-  return (
-    <div className={`flatstack ${exploded ? 'is-exploded' : ''}`}>
-      {layers.map((l, i) => (
-        <div key={i} className={`flatstack__layer flatstack__layer--${l.type}`} style={{ '--c': LAYER_COLORS[l.type], '--i': i }}>
-          <span className="flatstack__label">{l.label}</span>
-        </div>
-      ))}
-    </div>
-  )
-}
 
 // true cuando el elemento está cerca de la pantalla (y se queda en true): ahí empieza la descarga.
 function useNearViewport(ref) {
@@ -50,17 +21,8 @@ function useNearViewport(ref) {
   return near
 }
 
-export function hasRecipe(id) {
-  return Boolean(RECIPES[id])
-}
-
-export default function BurgerStage({ burgerId, name }) {
-  const recipe = RECIPES[burgerId]
-  const [exploded, setExploded] = useState(false)
+export function useGraphicsEnv() {
   const [env, setEnv] = useState(null)
-  const ref = useRef(null)
-  const near = useNearViewport(ref)
-
   useEffect(() => {
     const mq = window.matchMedia?.('(prefers-reduced-motion: reduce)')
     const update = () => setEnv({ tier: graphicsTier(), reducedMotion: prefersReducedMotion() })
@@ -68,29 +30,55 @@ export default function BurgerStage({ burgerId, name }) {
     mq?.addEventListener?.('change', update)
     return () => mq?.removeEventListener?.('change', update)
   }, [])
+  return env
+}
+
+export function hasRecipe(id) {
+  return Boolean(RECIPES[id])
+}
+
+// Vista previa en la tarjeta. Al tocarla se abre el visor a pantalla completa.
+export default function BurgerStage({ burger, selectionLabel, onAdd }) {
+  const recipe = RECIPES[burger.id]
+  const env = useGraphicsEnv()
+  const ref = useRef(null)
+  const near = useNearViewport(ref)
+  const [open, setOpen] = useState(false)
 
   if (!recipe) return null
 
   return (
-    <button
-      ref={ref}
-      type="button"
-      className="viewer"
-      onClick={() => setExploded((e) => !e)}
-      aria-pressed={exploded}
-      aria-label={`${exploded ? 'Montar' : 'Desmontar'} la ${name} para ver sus capas`}
-    >
-      <span className="viewer__bokeh" aria-hidden="true" />
-      {env && near && (env.tier === 'off' ? (
-        <FlatStack recipe={recipe} exploded={exploded} />
-      ) : (
-        <Suspense fallback={<span className="viewer__loading">Encendiendo la plancha…</span>}>
-          <BurgerViewer recipe={recipe} exploded={exploded} tier={env.tier} reducedMotion={env.reducedMotion} />
-        </Suspense>
-      ))}
-      <span className="viewer__hint" aria-hidden="true">
-        {exploded ? 'Toca para montarla' : 'Toca para desmontarla'}
-      </span>
-    </button>
+    <>
+      <button
+        ref={ref}
+        type="button"
+        className="viewer"
+        onClick={() => setOpen(true)}
+        aria-label={`Ver la ${burger.name} en 3D a pantalla completa`}
+      >
+        <span className="viewer__bokeh" aria-hidden="true" />
+        {env && near && (env.tier === 'off' ? (
+          <FlatStack recipe={recipe} exploded={false} />
+        ) : (
+          <Suspense fallback={<span className="viewer__loading">Encendiendo la plancha…</span>}>
+            <BurgerViewer recipe={recipe} tier={env.tier} reducedMotion={env.reducedMotion} paused={open} />
+          </Suspense>
+        ))}
+        <span className="viewer__hint" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="15" height="15"><path fill="currentColor" d="M4 4h6v2H6v4H4zm10 0h6v6h-2V6h-4zM4 14h2v4h4v2H4zm14 4v-4h2v6h-6v-2z" /></svg>
+          Ver en 3D
+        </span>
+      </button>
+      {open && env && (
+        <BurgerFullscreen
+          burger={burger}
+          recipe={recipe}
+          env={env}
+          selectionLabel={selectionLabel}
+          onAdd={onAdd}
+          onClose={() => setOpen(false)}
+        />
+      )}
+    </>
   )
 }

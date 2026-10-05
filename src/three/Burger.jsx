@@ -1,17 +1,39 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { ContactShadows, Html } from '@react-three/drei'
+import { ContactShadows } from '@react-three/drei'
+import * as THREE from 'three'
 import { LAYERS } from './layers'
 
-const GAP = 0.44 // separación extra entre capas al desmontar
+export const ROW_SPACING = 2.7 // distancia entre piezas en el despiece horizontal
+const GAP = 0.44 // separación extra entre capas en el despiece vertical
 const STAGGER = 0.055 // retardo entre capas (s)
+const TAU = Math.PI * 2
+const tmp = new THREE.Vector3()
 
-// Pila de capas con vista explosionada. Cada capa sigue un muelle propio hacia su objetivo
-// (0 = montada, 1 = desmontada), con un pequeño retardo escalonado: al desmontar sale primero el
-// pan de arriba; al montar, cae primero el de abajo. Si se toca a mitad de animación, el muelle
-// simplemente cambia de objetivo, sin saltos.
-export default function Burger({ recipe, exploded, quality = 1, reducedMotion = false, onSettled }) {
+// Posición de cada capa en el despiece horizontal: en fila, en el orden en que se monta la burger
+// (pan de abajo a la izquierda, pan de arriba a la derecha).
+export const rowX = (i, n) => (i - (n - 1) / 2) * ROW_SPACING
+
+// Pila de capas que se monta y desmonta.
+//   mode: 'assembled' | 'vertical' | 'horizontal'
+// Cada capa sigue un muelle propio hacia su objetivo (0 = montada, 1 = desmontada) con un pequeño
+// retardo escalonado; si se cambia a mitad de animación, el muelle cambia de objetivo sin saltos.
+// La cámara NO se toca aquí: la controla el visor que use este componente.
+export default function Burger({
+  recipe,
+  mode = 'assembled',
+  focus = 0,
+  quality = 1,
+  reducedMotion = false,
+  autoRotate = false,
+  labelEls, // ref a un array de elementos DOM (fuera del canvas) que se colocan sobre cada capa
+  onSettled,
+  onLayerTap,
+}) {
   const n = recipe.length
+  const exploded = mode !== 'assembled'
+  const lastExplodedMode = useRef(mode === 'assembled' ? 'vertical' : mode)
+  if (exploded) lastExplodedMode.current = mode
 
   const layout = useMemo(() => {
     let y = 0
@@ -22,28 +44,32 @@ export default function Burger({ recipe, exploded, quality = 1, reducedMotion = 
         def,
         assembledY: y,
         explodedY: y + i * GAP,
-        // "Juguete desmontado": cada pieza se ladea y se desplaza un poco, alternando lados
-        tiltX: (i % 2 ? 1 : -1) * 0.1 + 0.08, // inclinadas hacia cámara: se ve la cara de cada ingrediente
-        tiltZ: ((i * 7) % 3 - 1) * 0.1,
+        tiltX: (i % 2 ? 1 : -1) * 0.1 + 0.08,
+        tiltZ: (((i * 7) % 3) - 1) * 0.1,
         spin: (i % 2 ? 1 : -1) * 0.5,
+        rowX: rowX(i, n),
       }
       y += def.height
       return item
     })
-    const assembledH = y
-    const explodedH = y + (n - 1) * GAP
-    return { items, assembledH, explodedH }
+    return { items, assembledH: y, explodedH: y + (n - 1) * GAP }
   }, [recipe, n])
 
   const spinRef = useRef()
-  const stackRef = useRef()
   const shadowRef = useRef()
   const layerRefs = useRef([])
-  const labelRefs = useRef([])
-  const labelGroupRefs = useRef([])
   const sim = useRef(null)
   if (!sim.current) {
-    sim.current = { p: new Float32Array(n), v: new Float32Array(n), goal: new Float32Array(n), switchAt: new Float32Array(n), target: 0, clock: 0, settled: true }
+    sim.current = {
+      p: new Float32Array(n),
+      v: new Float32Array(n),
+      goal: new Float32Array(n),
+      switchAt: new Float32Array(n),
+      selfSpin: new Float32Array(n),
+      target: 0,
+      clock: 0,
+      settled: true,
+    }
   }
 
   useEffect(() => {
@@ -61,7 +87,7 @@ export default function Burger({ recipe, exploded, quality = 1, reducedMotion = 
     const s = sim.current
     const dt = Math.min(delta, 1 / 30)
     s.clock += dt
-    const k = reducedMotion ? 260 : 95
+    const k = reducedMotion ? 260 : 90
     const c = reducedMotion ? 2 * Math.sqrt(k) : 11.5 // con movimiento: ligeramente elástico
     let avg = 0
     let moving = false
@@ -77,40 +103,68 @@ export default function Burger({ recipe, exploded, quality = 1, reducedMotion = 
 
     const { items, assembledH, explodedH } = layout
     const t = state.clock.elapsedTime
-    const centre = (assembledH + (explodedH - assembledH) * avg) / 2
+    const horizontal = lastExplodedMode.current === 'horizontal'
+    const centre = horizontal ? assembledH / 2 : (assembledH + (explodedH - assembledH) * avg) / 2
 
     for (let i = 0; i < n; i++) {
       const it = items[i]
       const p = s.p[i]
-      const float = reducedMotion ? 0 : Math.sin(t * 1.3 + i * 0.9) * 0.035 * Math.max(0, p)
-      const y = it.assembledY + (it.explodedY - it.assembledY) * p + float - centre
+      const pc = Math.max(0, Math.min(1, p))
+      const float = reducedMotion ? 0 : Math.sin(t * 1.3 + i * 0.9) * 0.035 * pc
       const obj = layerRefs.current[i]
-      if (obj) {
-        obj.position.y = y
-        obj.rotation.x = it.tiltX * p
-        obj.rotation.z = it.tiltZ * p
-        obj.rotation.y = it.spin * p
+      const baseY = it.assembledY - centre
+      let x = 0
+      let y
+      let rotX
+      let rotZ
+      let rotY
+      if (horizontal) {
+        // Salta en arco hasta su sitio en la fila y se inclina hacia la cámara para enseñar su cara
+        x = it.rowX * p
+        y = baseY * (1 - p) + (-it.def.height / 2) * p + Math.sin(pc * Math.PI) * 0.7 + float
+        rotX = 0.55 * p
+        rotZ = 0
+        const isFocus = i === focus
+        if (!reducedMotion) s.selfSpin[i] += dt * (isFocus ? 0.45 : 0.15) * pc
+        rotY = s.selfSpin[i]
+      } else {
+        y = baseY + i * GAP * p + float
+        rotX = it.tiltX * p
+        rotZ = it.tiltZ * p
+        rotY = it.spin * p
+        s.selfSpin[i] *= 1 - Math.min(1, dt * 4)
       }
-      const labelGroup = labelGroupRefs.current[i]
-      if (labelGroup) labelGroup.position.y = y + it.def.height * 0.5
-      const label = labelRefs.current[i]
-      if (label) label.style.opacity = Math.max(0, Math.min(1, (p - 0.55) * 3))
+      if (obj) {
+        obj.position.set(x, y, 0)
+        obj.rotation.set(rotX, rotY, rotZ)
+        // La pieza enfocada en el despiece horizontal se ve un poco más grande
+        const sc = horizontal ? 1 + (i === focus ? 0.12 : -0.08) * pc : 1
+        obj.scale.setScalar(obj.scale.x + (sc - obj.scale.x) * Math.min(1, dt * 8))
+      }
+      const label = labelEls?.current?.[i]
+      if (label) {
+        // Proyectamos el ancla de la etiqueta a píxeles de pantalla
+        if (horizontal) tmp.set(it.rowX, -1.05, 0)
+        else tmp.set(1.3, y + it.def.height * 0.5, 0)
+        tmp.project(state.camera)
+        const px = (tmp.x * 0.5 + 0.5) * state.size.width
+        const py = (-tmp.y * 0.5 + 0.5) * state.size.height
+        label.style.transform = horizontal ? `translate(${px}px, ${py}px) translate(-50%, 0)` : `translate(${px}px, ${py}px) translate(0, -50%)`
+        const vis = Math.max(0, Math.min(1, (p - 0.55) * 3))
+        label.style.opacity = horizontal ? vis * (i === focus ? 1 : 0.45) : vis
+        label.dataset.focus = horizontal && i === focus ? 'true' : 'false'
+      }
     }
 
-    // Cuando está desmontada se aparta a la izquierda para dejar sitio a las etiquetas
-    if (stackRef.current) stackRef.current.position.x = -0.85 * avg
-    // Giro lento cuando está montada; casi quieta cuando está desmontada
-    if (spinRef.current && !reducedMotion) spinRef.current.rotation.y += dt * (0.35 - 0.27 * avg)
-    if (shadowRef.current) shadowRef.current.position.y = -centre - 0.02 - avg * 0.25
-
-    // Cámara: se aleja lo justo para que quepa la pila (y las etiquetas) en el visor
-    const cam = state.camera
-    const tanHalf = Math.tan((cam.fov * Math.PI) / 360)
-    const halfH = (assembledH + (explodedH - assembledH) * avg) / 2 + 0.45
-    const halfW = 1.3 + avg * 1.15
-    const dist = Math.max(halfH / tanHalf, halfW / (tanHalf * cam.aspect)) * 1.04 + 1.1
-    cam.position.set(0, dist * (0.36 - avg * 0.12), dist)
-    cam.lookAt(0, -0.05, 0)
+    // Giro lento (solo en la vista previa de la carta). Al desmontar vuelve de cara a la cámara.
+    if (spinRef.current) {
+      const r = spinRef.current.rotation
+      if (autoRotate && !reducedMotion && avg < 0.5) r.y += dt * 0.35
+      else if (avg > 0.01) r.y += ((Math.round(r.y / TAU) * TAU) - r.y) * Math.min(1, dt * 5)
+    }
+    if (shadowRef.current) {
+      shadowRef.current.position.y = horizontal ? -0.95 : -centre - 0.02 - avg * 0.25
+    }
 
     if (!moving && !s.settled) {
       s.settled = true
@@ -118,36 +172,38 @@ export default function Burger({ recipe, exploded, quality = 1, reducedMotion = 
     }
   })
 
+  const rowWidth = n * ROW_SPACING + 2
+
   return (
     <group>
-      <group ref={stackRef}>
-        <group ref={spinRef}>
-          {layout.items.map((it, i) => {
-            const { Component } = it.def
-            return (
-              <group key={i} ref={(el) => (layerRefs.current[i] = el)}>
-                <Component q={quality} kind={it.kind} seed={it.seed} />
-              </group>
-            )
-          })}
-        </group>
-        {layout.items.map((it, i) => (
-          <group key={`l${i}`} position-x={1.3} ref={(el) => (labelGroupRefs.current[i] = el)}>
-            <Html zIndexRange={[5, 0]} style={{ pointerEvents: 'none' }}>
-              <span className="layer-label" ref={(el) => (labelRefs.current[i] = el)} style={{ opacity: 0 }}>
-                {it.label}
-              </span>
-            </Html>
-          </group>
-        ))}
+      <group ref={spinRef}>
+        {layout.items.map((it, i) => {
+          const { Component } = it.def
+          return (
+            <group
+              key={i}
+              ref={(el) => (layerRefs.current[i] = el)}
+              onClick={
+                onLayerTap
+                  ? (e) => {
+                      e.stopPropagation()
+                      onLayerTap(i)
+                    }
+                  : undefined
+              }
+            >
+              <Component q={quality} kind={it.kind} seed={it.seed} />
+            </group>
+          )
+        })}
       </group>
       <ContactShadows
         ref={shadowRef}
-        opacity={0.75}
-        scale={5}
+        opacity={0.7}
+        scale={lastExplodedMode.current === 'horizontal' ? [rowWidth, 5] : 5}
         blur={2.6}
         far={1.6}
-        resolution={quality >= 1 ? 512 : 256}
+        resolution={quality >= 1 ? 1024 : 512}
         color="#000000"
         frames={Infinity}
       />
