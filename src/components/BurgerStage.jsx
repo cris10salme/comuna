@@ -39,7 +39,7 @@ export function hasRecipe(id) {
 
 // Vista previa en la tarjeta: la burger montada girando. Al tocarla se abre el visor a pantalla completa.
 export default function BurgerStage({ burger, env, paused, onOpen }) {
-  const recipe = RECIPES[burger.id]
+  const recipe = burger.recipe || RECIPES[burger.id]
   const ref = useRef(null)
   const near = useNearViewport(ref)
   if (!recipe) return null

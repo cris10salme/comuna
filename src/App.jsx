@@ -4,6 +4,7 @@ import Hero from './components/Hero'
 import Facts from './components/Facts'
 import Burgers from './components/Burgers'
 import Tacos from './components/Tacos'
+import Designer from './components/Designer'
 import { DessertsAndDrinks, Starters } from './components/SimpleMenus'
 import Info from './components/Info'
 import Footer from './components/Footer'
@@ -18,6 +19,7 @@ export default function App() {
         <Hero />
         <Facts />
         <Burgers />
+        <Designer />
         <Tacos />
         <Starters />
         <DessertsAndDrinks />

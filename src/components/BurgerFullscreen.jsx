@@ -12,7 +12,7 @@ const SWIPE_PX = 45 // arrastre mínimo para pasar de ingrediente
 // en "Despiece" los ingredientes se ponen en fila y se recorren deslizando de lado a lado.
 export default function BurgerFullscreen({ burgers, index, onIndex, env, selectionLabelOf, onAdd, onClose }) {
   const burger = burgers[index]
-  const recipe = RECIPES[burger.id]
+  const recipe = burger.recipe || RECIPES[burger.id]
   const n = recipe.length
   const [mode, setMode] = useState('assembled')
   const [focus, setFocus] = useState(0)
@@ -182,13 +182,21 @@ export default function BurgerFullscreen({ burgers, index, onIndex, env, selecti
 
       <section className="fs__panel ticket" ref={panelRef} tabIndex={-1} aria-label="Detalles y pedido">
         <div className="fs__head">
-          <button className="fs__arrow fs__arrow--small" onClick={() => goBurger(index - 1)} aria-label="Burger anterior">‹</button>
+          {burgers.length > 1 ? (
+            <button className="fs__arrow fs__arrow--small" onClick={() => goBurger(index - 1)} aria-label="Burger anterior">‹</button>
+          ) : (
+            <span />
+          )}
           <div className="fs__title">
-            <small>{index + 1} / {burgers.length}</small>
+            <small>{burger.kicker || `${index + 1} / ${burgers.length}`}</small>
             <h2 className="fs__name" aria-live="polite">{burger.name}</h2>
           </div>
-          <span className="fs__price">{price(burger.price)}<small>€</small></span>
-          <button className="fs__arrow fs__arrow--small" onClick={() => goBurger(index + 1)} aria-label="Burger siguiente">›</button>
+          <span className="fs__price">{burger.estimated && <small>≈</small>}{price(burger.price)}<small>€</small></span>
+          {burgers.length > 1 ? (
+            <button className="fs__arrow fs__arrow--small" onClick={() => goBurger(index + 1)} aria-label="Burger siguiente">›</button>
+          ) : (
+            <span />
+          )}
         </div>
 
         <div className="segmented fs__modes" role="radiogroup" aria-label="Vista">
@@ -220,7 +228,7 @@ export default function BurgerFullscreen({ burgers, index, onIndex, env, selecti
           <button className={`btn btn--primary btn--block ${added ? 'is-added' : ''}`} onClick={handleAdd}>
             {added ? '✓ Añadida a tu comanda' : '+ Añadir al pedido'}
           </button>
-          <small>{selectionLabelOf(burger)} · puedes cambiarlo en la carta</small>
+          <small>{burger.estimated ? 'Precio orientativo: te lo confirmamos al llamar' : `${selectionLabelOf(burger)} · puedes cambiarlo en la carta`}</small>
         </div>
       </section>
     </div>,

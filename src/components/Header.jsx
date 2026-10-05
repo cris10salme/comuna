@@ -4,6 +4,7 @@ import { useOrder } from '../lib/order'
 
 const SECTIONS = [
   ['burgers', 'Burgers'],
+  ['disena', 'Diseña con IA'],
   ['tacos', 'Tacos'],
   ['entrantes', 'Entrantes'],
   ['postres', 'Postres'],

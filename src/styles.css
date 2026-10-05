@@ -1542,3 +1542,97 @@ button {
   height: 36px;
   font-size: 22px;
 }
+
+/* ---------- Diseña tu burger con IA ---------- */
+.designer {
+  display: grid;
+  gap: 14px;
+}
+.designer__label {
+  font-family: var(--display);
+  font-size: 22px;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+.designer__input {
+  font: inherit;
+  font-size: 16px; /* evita el zoom automático en iOS */
+  width: 100%;
+  resize: vertical;
+  min-height: 92px;
+  padding: 12px 14px;
+  border: 1.5px solid rgba(42, 37, 34, 0.4);
+  border-radius: var(--radius);
+  background: #fffaf2;
+  color: var(--paper-ink);
+}
+.designer__examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.designer__examples .chip {
+  font-size: 13px;
+}
+.designer__error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: #fbe3d3;
+  color: #8a2f05;
+  font-weight: 600;
+  font-size: 14px;
+}
+.designer__fineprint {
+  margin: 0;
+  font-size: 12px;
+  color: rgba(42, 37, 34, 0.6);
+}
+.designer__result {
+  margin-top: 20px;
+  display: grid;
+  gap: 4px;
+}
+.designer__desc {
+  margin: 0 0 10px;
+  font-size: 16px;
+}
+.designer__price {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px 0;
+  border-top: 2px dashed rgba(42, 37, 34, 0.25);
+  margin-bottom: 8px;
+}
+.designer__price > small {
+  font-size: 13px;
+  color: rgba(42, 37, 34, 0.7);
+  flex: 1;
+  min-width: 180px;
+}
+.designer__more {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+.designer__retry {
+  background: none;
+  border: 0;
+  font-weight: 700;
+  text-decoration: underline;
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+@media (min-width: 900px) {
+  #disena .section__head + * {
+    max-width: 640px;
+  }
+  .designer__result {
+    max-width: 640px;
+  }
+}
