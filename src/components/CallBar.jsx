@@ -13,6 +13,11 @@ export default function CallBar() {
         </svg>
         Llamar
       </a>
+      <button className="callbar__chat" onClick={() => window.dispatchEvent(new Event('open-chat'))} aria-label="¿Qué pido? Abrir el asistente">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path fill="currentColor" d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm3 6.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm5 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm5 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
+        </svg>
+      </button>
       <button className="callbar__order" onClick={() => setOpen(true)}>
         {count > 0 ? (
           <>Ver pedido · {count} · {money(total)}</>
