@@ -40,14 +40,3 @@ export function openStatus(date) {
   }
   return { open: false, label: 'Cerrado' }
 }
-
-// "Esta noche" si hoy abrimos y aún no hemos cerrado; si no, cuándo es la próxima apertura.
-export function nextServiceLabel(date) {
-  const { day, minutes } = nowInMadrid(date)
-  if (BUSINESS.openDays.includes(day) && minutes < toMin(BUSINESS.closes)) return 'Esta noche'
-  for (let i = 1; i <= 7; i++) {
-    const d = (day + i) % 7
-    if (BUSINESS.openDays.includes(d)) return i === 1 ? 'Mañana' : `El ${DAY_NAMES[d]}`
-  }
-  return 'Esta noche'
-}
