@@ -56,7 +56,7 @@ function Rig({ mode, focus, dragRef, n, controlsRef, reducedMotion }) {
   return null
 }
 
-export default function FullscreenScene({ recipe, mode, focus, dragRef, labelEls, tier, reducedMotion, onLayerTap, onInteract }) {
+export default function FullscreenScene({ burgerId, recipe, mode, focus, dragRef, labelEls, tier, reducedMotion, onLayerTap, onInteract }) {
   const controlsRef = useRef()
   const [dpr, setDpr] = useState(tier === 'high' ? 2 : 1.5)
   const n = recipe.length
@@ -71,7 +71,7 @@ export default function FullscreenScene({ recipe, mode, focus, dragRef, labelEls
     >
       <PerformanceMonitor onDecline={() => setDpr(1.25)} />
       <Studio shadows={shadows} />
-      <Rig mode={mode} focus={focus} dragRef={dragRef} n={n} controlsRef={controlsRef} reducedMotion={reducedMotion} />
+      <Rig key={burgerId} mode={mode} focus={focus} dragRef={dragRef} n={n} controlsRef={controlsRef} reducedMotion={reducedMotion} />
       <OrbitControls
         ref={controlsRef}
         enabled={false}
@@ -89,6 +89,7 @@ export default function FullscreenScene({ recipe, mode, focus, dragRef, labelEls
       />
       <Suspense fallback={null}>
         <Burger
+          key={burgerId}
           recipe={recipe}
           mode={mode}
           focus={focus}

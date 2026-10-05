@@ -185,7 +185,8 @@ export function dripGeometry(q = 1) {
 
 // Charco de salsa o mermelada: disco irregular, ligeramente abombado.
 export function blobGeometry(q = 1, { radius = 0.95, height = 0.035, seed = 1, wobble = 0.25 } = {}) {
-  const geo = new THREE.CircleGeometry(radius, seg(96, q), 0, Math.PI * 2)
+  // Disco subdividido en anillos (no un abanico de triángulos largos, que hace rayos de luz)
+  const geo = new THREE.RingGeometry(0, radius, seg(96, q), seg(18, q))
   geo.rotateX(-Math.PI / 2)
   const p = geo.attributes.position
   for (let i = 0; i < p.count; i++) {
@@ -202,7 +203,7 @@ export function blobGeometry(q = 1, { radius = 0.95, height = 0.035, seed = 1, w
 
 // Hoja de lechuga: disco con el borde muy rizado.
 export function lettuceGeometry(q = 1, { radius = 1.22, seed = 1 } = {}) {
-  const geo = new THREE.CircleGeometry(radius, seg(180, q))
+  const geo = new THREE.RingGeometry(0, radius, seg(180, q), seg(20, q))
   geo.rotateX(-Math.PI / 2)
   const p = geo.attributes.position
   const colors = []
@@ -211,8 +212,12 @@ export function lettuceGeometry(q = 1, { radius = 1.22, seed = 1 } = {}) {
     const z = p.getZ(i)
     const d = Math.hypot(x, z) / radius
     const a = Math.atan2(z, x)
-    const ruffle = Math.sin(a * 17 + angleNoise(a, seed, 2) * 6) * 0.07 * Math.pow(d, 2.5)
-    const k = 1 + (angleNoise(a, seed + 1, 4) - 0.5) * 0.25 * d
+    // Rizo irregular: varias frecuencias moduladas por ruido, más fuerte en el borde
+    const wob = angleNoise(a, seed, 2)
+    const ruffle =
+      (Math.sin(a * 11 + wob * 9) * 0.05 + Math.sin(a * 23 + wob * 15) * 0.025) * Math.pow(d, 2.2) * (0.6 + wob * 0.8) +
+      (fbm(x * 3 + 7, z * 3 + 7, seed + 5) - 0.5) * 0.05
+    const k = 1 + (angleNoise(a, seed + 1, 4) - 0.5) * 0.3 * d
     p.setXYZ(i, x * k, ruffle - d * d * 0.06, z * k)
     const g = 0.75 + d * 0.25
     colors.push(0.75 + (1 - d) * 0.25, g, 0.55 + (1 - d) * 0.35)

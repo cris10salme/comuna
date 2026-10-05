@@ -1,6 +1,7 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { price } from '../lib/format'
+import { RECIPES } from '../three/recipes'
 import FlatStack from './FlatStack'
 
 const FullscreenScene = lazy(() => import('../three/FullscreenScene'))
@@ -9,7 +10,9 @@ const SWIPE_PX = 45 // arrastre mínimo para pasar de ingrediente
 
 // Visor a pantalla completa de una burger: montada se gira con el dedo y se acerca pellizcando;
 // en "Despiece" los ingredientes se ponen en fila y se recorren deslizando de lado a lado.
-export default function BurgerFullscreen({ burger, recipe, env, selectionLabel, onAdd, onClose }) {
+export default function BurgerFullscreen({ burgers, index, onIndex, env, selectionLabelOf, onAdd, onClose }) {
+  const burger = burgers[index]
+  const recipe = RECIPES[burger.id]
   const n = recipe.length
   const [mode, setMode] = useState('assembled')
   const [focus, setFocus] = useState(0)
@@ -26,6 +29,14 @@ export default function BurgerFullscreen({ burger, recipe, env, selectionLabel, 
 
   const exploded = mode !== 'assembled'
   const go = useCallback((i) => setFocus(Math.max(0, Math.min(n - 1, i))), [n])
+
+  // Cambiar de burger: vuelve a verse montada
+  const goBurger = (i) => {
+    const next = (i + burgers.length) % burgers.length
+    onIndex(next)
+    setMode('assembled')
+    setFocus(0)
+  }
 
   // El botón "atrás" del móvil cierra el visor en vez de salir de la web
   useEffect(() => {
@@ -110,7 +121,7 @@ export default function BurgerFullscreen({ burger, recipe, env, selectionLabel, 
   }
 
   const handleAdd = () => {
-    onAdd()
+    onAdd(burger)
     setAdded(true)
     setTimeout(() => setAdded(false), 1400)
   }
@@ -144,6 +155,7 @@ export default function BurgerFullscreen({ burger, recipe, env, selectionLabel, 
         ) : (
           <Suspense fallback={<span className="viewer__loading">Encendiendo la plancha…</span>}>
             <FullscreenScene
+              burgerId={burger.id}
               recipe={recipe}
               mode={mode}
               focus={focus}
@@ -170,8 +182,13 @@ export default function BurgerFullscreen({ burger, recipe, env, selectionLabel, 
 
       <section className="fs__panel ticket" ref={panelRef} tabIndex={-1} aria-label="Detalles y pedido">
         <div className="fs__head">
-          <h2 className="fs__name">{burger.name}</h2>
+          <button className="fs__arrow fs__arrow--small" onClick={() => goBurger(index - 1)} aria-label="Burger anterior">‹</button>
+          <div className="fs__title">
+            <small>{index + 1} / {burgers.length}</small>
+            <h2 className="fs__name" aria-live="polite">{burger.name}</h2>
+          </div>
           <span className="fs__price">{price(burger.price)}<small>€</small></span>
+          <button className="fs__arrow fs__arrow--small" onClick={() => goBurger(index + 1)} aria-label="Burger siguiente">›</button>
         </div>
 
         <div className="segmented fs__modes" role="radiogroup" aria-label="Vista">
@@ -203,7 +220,7 @@ export default function BurgerFullscreen({ burger, recipe, env, selectionLabel, 
           <button className={`btn btn--primary btn--block ${added ? 'is-added' : ''}`} onClick={handleAdd}>
             {added ? '✓ Añadida a tu comanda' : '+ Añadir al pedido'}
           </button>
-          <small>{selectionLabel} · puedes cambiarlo en la carta</small>
+          <small>{selectionLabelOf(burger)} · puedes cambiarlo en la carta</small>
         </div>
       </section>
     </div>,

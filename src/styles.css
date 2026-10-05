@@ -1518,3 +1518,27 @@ button {
   font-size: 12px;
   color: rgba(42, 37, 34, 0.65);
 }
+.fs__head {
+  display: grid;
+  grid-template-columns: 36px 1fr auto 36px;
+  align-items: center;
+  gap: 8px;
+}
+.fs__title {
+  min-width: 0;
+}
+.fs__title small {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: rgba(42, 37, 34, 0.6);
+}
+.fs__name {
+  font-size: 22px;
+}
+.fs__arrow--small {
+  width: 36px;
+  height: 36px;
+  font-size: 22px;
+}

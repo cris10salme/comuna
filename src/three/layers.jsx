@@ -202,12 +202,14 @@ function Bacon({ q, seed = 1 }) {
 }
 
 // Piezas repetidas con InstancedMesh: una sola llamada de dibujo por tipo.
-function Scattered({ geometry, material, points, y = 0, tilt = 0, scale = 1 }) {
+function Scattered({ geometry, material, points, y = 0, tilt = 0, scale = 1, pile = 0 }) {
   const mesh = useMemo(() => {
     const m = new THREE.InstancedMesh(geometry, material, points.length)
     const o = new THREE.Object3D()
     points.forEach((p, i) => {
-      o.position.set(p.x, y + p.r2 * 0.02, p.z)
+      // `pile`: las piezas del centro quedan más altas, como un montoncito
+      const centre = 1 - Math.min(1, Math.hypot(p.x, p.z) / 0.9)
+      o.position.set(p.x, y + p.r2 * 0.02 + centre * pile * (0.5 + p.r2), p.z)
       o.rotation.set((p.r2 - 0.5) * tilt, p.rot, (p.s - 1) * tilt)
       o.scale.setScalar(p.s * scale)
       o.updateMatrix()
@@ -216,7 +218,7 @@ function Scattered({ geometry, material, points, y = 0, tilt = 0, scale = 1 }) {
     m.castShadow = true
     m.receiveShadow = true
     return m
-  }, [geometry, material, points, y, tilt, scale])
+  }, [geometry, material, points, y, tilt, scale, pile])
   return <primitive object={mesh} />
 }
 
@@ -226,25 +228,26 @@ function OnionDiced({ q }) {
     () => new THREE.MeshPhysicalMaterial({ color: '#f1ead6', roughness: 0.25, clearcoat: 0.8, emissive: '#f1ead6', emissiveIntensity: 0.08 }),
     [],
   )
-  const pts = useMemo(() => scatter(q >= 1 ? 90 : 50, 0.85, 3), [q])
+  const pts = useMemo(() => scatter(q >= 1 ? 150 : 90, 0.85, 3), [q])
   return <Scattered geometry={geo} material={mat} points={pts} y={0.025} tilt={0.6} />
 }
 
 function OnionCrispy({ q }) {
-  const geo = useMemo(() => new THREE.TorusGeometry(0.07, 0.016, 5, 10, Math.PI * 1.4), [])
-  const mat = useMemo(() => new THREE.MeshStandardMaterial({ color: '#b86b22', roughness: 0.65 }), [])
-  const pts = useMemo(() => scatter(q >= 1 ? 70 : 40, 0.9, 7), [q])
-  return <Scattered geometry={geo} material={mat} points={pts} y={0.035} tilt={2.5} />
+  // Montón de aros finos y dorados, unos encima de otros
+  const geo = useMemo(() => new THREE.TorusGeometry(0.085, 0.017, 5, 12, Math.PI * 1.6), [])
+  const mat = useMemo(() => new THREE.MeshStandardMaterial({ color: '#c47a2a', roughness: 0.6 }), [])
+  const pts = useMemo(() => scatter(q >= 1 ? 170 : 100, 0.85, 7), [q])
+  return <Scattered geometry={geo} material={mat} points={pts} y={0.04} tilt={2.8} pile={0.06} />
 }
 
 function OnionCaramel({ q }) {
-  const geo = useMemo(() => new THREE.TorusGeometry(0.12, 0.025, 6, 14, Math.PI * 1.2), [])
+  const geo = useMemo(() => new THREE.TorusGeometry(0.13, 0.028, 6, 16, Math.PI * 1.3), [])
   const mat = useMemo(
     () => new THREE.MeshPhysicalMaterial({ color: '#7a3a12', roughness: 0.2, clearcoat: 1, clearcoatRoughness: 0.1 }),
     [],
   )
-  const pts = useMemo(() => scatter(q >= 1 ? 40 : 25, 0.85, 11), [q])
-  return <Scattered geometry={geo} material={mat} points={pts} y={0.03} tilt={1.4} />
+  const pts = useMemo(() => scatter(q >= 1 ? 90 : 60, 0.82, 11), [q])
+  return <Scattered geometry={geo} material={mat} points={pts} y={0.035} tilt={1.2} pile={0.05} />
 }
 
 function Pickles({ q }) {
