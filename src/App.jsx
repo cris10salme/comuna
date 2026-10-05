@@ -1,6 +1,7 @@
 import { OrderProvider } from './lib/order'
 import Header from './components/Header'
 import Hero from './components/Hero'
+import Facts from './components/Facts'
 import Burgers from './components/Burgers'
 import Tacos from './components/Tacos'
 import { DessertsAndDrinks, Starters } from './components/SimpleMenus'
@@ -15,6 +16,7 @@ export default function App() {
       <Header />
       <main>
         <Hero />
+        <Facts />
         <Burgers />
         <Tacos />
         <Starters />

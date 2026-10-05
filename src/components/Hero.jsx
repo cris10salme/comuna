@@ -18,8 +18,8 @@ export default function Hero() {
         </div>
       </div>
       <p className="hero__lead">
-        Burgers de doble smash y tacos con salsa de queso casera, en Balerma. De martes a domingo, en el
-        local o a domicilio.
+        Burgers de doble smash y tacos con salsa de queso casera. De martes a domingo, en el local o a
+        domicilio en Balerma.
       </p>
       <div className="hero__actions">
         <a href="#burgers" className="btn btn--primary">Ver la carta</a>

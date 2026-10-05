@@ -8,4 +8,6 @@ npm run dev     # desarrollo
 npm run build   # genera dist/
 ```
 
+Páginas legales en `src/legal.jsx`: buscar `RELLENAR` y completar antes de publicar.
+
 Estado: fase 1 (estructura, diseño y carta). Pendiente: 3D, "Diseña tu burger con IA", chat y despliegue.

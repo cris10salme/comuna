@@ -16,7 +16,7 @@ export default function Info() {
               <tr><th>Lunes</th><td>Cerrado</td></tr>
             </tbody>
           </table>
-          <p className="info__muted">Servicio a domicilio.</p>
+          <p className="info__muted">Servicio a domicilio solo en {BUSINESS.deliveryArea}.</p>
         </div>
 
         <div className="ticket info__card">

@@ -9,6 +9,9 @@ export default function Footer() {
         <a href={instagramUrl} target="_blank" rel="noopener">Instagram</a>
         {' · '}Alérgenos: pregunta al llamar al {BUSINESS.phoneDisplay}
       </p>
+      <p className="footer__legal">
+        <a href="/aviso-legal">Aviso legal</a> · <a href="/privacidad">Privacidad</a> · <a href="/cookies">Cookies</a>
+      </p>
     </footer>
   )
 }

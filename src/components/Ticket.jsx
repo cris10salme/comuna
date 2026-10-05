@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { BUSINESS } from '../data/business'
 import { money } from '../lib/format'
 import { orderText, useOrder } from '../lib/order'
 import OrderActions from './OrderActions'
@@ -73,7 +74,7 @@ export default function Ticket() {
                 <label className="field">
                   <span>Dirección de entrega</span>
                   <input value={address} onChange={(e) => setField('address', e.target.value)} placeholder="Calle, número, piso…" autoComplete="street-address" />
-                  <small>Consulta zona y gastos de envío al llamar.</small>
+                  <small>Solo repartimos en {BUSINESS.deliveryArea}. Gastos de envío: consúltalos al llamar.</small>
                 </label>
               )}
               <label className="field">
