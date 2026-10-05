@@ -3,6 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { PerformanceMonitor } from '@react-three/drei'
 import Burger from './Burger'
 import Studio, { fitDistance } from './Studio'
+import { canvasDpr } from '../lib/device'
 
 // Cámara fija de la vista previa: encuadra la burger montada.
 function PreviewCamera() {
@@ -19,7 +20,7 @@ function PreviewCamera() {
 export default function BurgerViewer({ recipe, tier, reducedMotion, paused = false }) {
   const wrapRef = useRef(null)
   const [visible, setVisible] = useState(true)
-  const [dpr, setDpr] = useState(tier === 'high' ? 1.75 : 1.25)
+  const [dpr, setDpr] = useState(() => canvasDpr(tier, 1.75))
 
   // No gastar batería dibujando cuando la burger no está en pantalla
   useEffect(() => {

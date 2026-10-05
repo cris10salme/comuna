@@ -64,6 +64,14 @@ export function bunTopGeometry(q = 1, R = 1, H = 0.72) {
   pts[pts.length - 1].x = 0
   const segments = seg(96, q)
   const geo = new THREE.LatheGeometry(pts, segments)
+  // Cúpula algo irregular, como un pan de verdad (no una media esfera perfecta)
+  const pp = geo.attributes.position
+  for (let i = 0; i < pp.count; i++) {
+    const x = pp.getX(i)
+    const z = pp.getZ(i)
+    const y = pp.getY(i)
+    if (y > 0.05) pp.setY(i, y * (1 + (fbm(x * 1.3 + 4, z * 1.3 + 4, 8) - 0.5) * 0.14))
+  }
   weldLatheSeam(perturbRadius(geo, 5, 0.05), pts.length, segments)
   // El polo de la cúpula: todas sus copias miran hacia arriba
   const nrm = geo.attributes.normal
@@ -107,7 +115,9 @@ export function pattyGeometry(q = 1, R = 1.12, H = 0.13, seed = 1) {
   for (const ring of rings) {
     for (let j = 0; j <= around; j++) {
       const a = (j / around) * Math.PI * 2
-      const lace = (angleNoise(a, seed, 3) - 0.5) * 0.22 + (angleNoise(a, seed + 3, 9) - 0.5) * 0.12
+      // Borde de encaje: varias frecuencias de ruido (la carne aplastada se rompe en el borde)
+      const lace =
+        (angleNoise(a, seed, 3) - 0.5) * 0.28 + (angleNoise(a, seed + 3, 9) - 0.5) * 0.16 + (angleNoise(a, seed + 5, 22) - 0.5) * 0.08
       const edge = smooth(0.7, 1, ring.t)
       const r = R * ring.t * (1 + lace * edge)
       const x = Math.cos(a) * r
@@ -142,8 +152,9 @@ export function pattyGeometry(q = 1, R = 1.12, H = 0.13, seed = 1) {
 
 // Loncha de queso fundido: cuadrada, apoyada sobre `support` y cayendo por fuera con curva suave.
 // `melt` controla cuánto cuelga (0 = queso curado rígido, 1 = cheddar muy fundido).
-export function cheeseGeometry(q = 1, { size = 2.0, support = 0.98, melt = 1, seed = 1 } = {}) {
-  const geo = new THREE.PlaneGeometry(size, size, seg(64, q), seg(64, q))
+export function cheeseGeometry(q = 1, { size = 2.0, support = 0.98, melt = 1, seed = 1, thickness = 0.03 } = {}) {
+  const n = seg(64, q)
+  const geo = new THREE.PlaneGeometry(size, size, n, n)
   geo.rotateX(-Math.PI / 2)
   const p = geo.attributes.position
   const corner = 1.16 // las esquinas se redondean: el queso fundido no hace picos
@@ -159,28 +170,84 @@ export function cheeseGeometry(q = 1, { size = 2.0, support = 0.98, melt = 1, se
     }
     // Borde irregular, como una loncha que se ha ido fundiendo
     const a = Math.atan2(z, x)
-    const edgeK = 1 + (angleNoise(a, seed + 4, 3) - 0.5) * 0.08 * smooth(0.8, 1.2, d)
+    const edgeK = 1 + (angleNoise(a, seed + 4, 3) - 0.5) * 0.1 * smooth(0.8, 1.2, d)
     x *= edgeK
     z *= edgeK
+    // Lo que sobresale de la carne cae en curva; cuanto más fundido, más cuelga
     const over = Math.max(0, d - support)
-    const droop = Math.pow(over, 1.35) * 1.6 * melt
-    const ripple = (fbm(x * 2 + 3, z * 2 + 3, seed) - 0.5) * 0.025 * melt
-    p.setXYZ(i, x, -droop + ripple, z)
+    const droop = Math.pow(over, 1.25) * 2.1 * melt + Math.pow(over, 3) * 2.5 * melt
+    // Al caer, se recoge un poco hacia el canto de la carne
+    const pull = 1 - Math.min(0.12, droop * 0.25)
+    const ripple = (fbm(x * 2 + 3, z * 2 + 3, seed) - 0.5) * 0.03 * melt
+    p.setXYZ(i, x * pull, -droop + ripple, z * pull)
   }
+  geo.computeVertexNormals()
+  const slab = thickenGrid(geo, n, thickness)
+  // Puntos de goteo: los vértices del borde que más cuelgan, separados entre sí
+  const border = gridBorder(n)
+  const spots = []
+  const cand = border.map((i) => new THREE.Vector3().fromBufferAttribute(p, i)).sort((a, b) => a.y - b.y)
+  for (const v of cand) {
+    if (spots.length >= 4) break
+    if (spots.every((s) => s.distanceTo(v) > 0.9)) spots.push(v)
+  }
+  slab.userData.drips = melt > 0.5 ? spots : []
+  return slab
+}
+
+// Índices del contorno de una rejilla (n+1)×(n+1), en orden.
+function gridBorder(n) {
+  const row = n + 1
+  const out = []
+  for (let i = 0; i < n; i++) out.push(i) // fila de arriba
+  for (let j = 0; j < n; j++) out.push(j * row + n) // columna derecha
+  for (let i = n; i > 0; i--) out.push(n * row + i) // fila de abajo
+  for (let j = n; j > 0; j--) out.push(j * row) // columna izquierda
+  return out
+}
+
+// Convierte una lámina en una loncha con grosor: cara de arriba, cara de abajo (desplazada según la
+// normal) y el canto cosido alrededor. Sin grosor, el queso visto de lado parece papel.
+function thickenGrid(sheet, n, t) {
+  const p = sheet.attributes.position
+  const nr = sheet.attributes.normal
+  const count = p.count
+  const pos = new Float32Array(count * 2 * 3)
+  for (let i = 0; i < count; i++) {
+    pos.set([p.getX(i), p.getY(i), p.getZ(i)], i * 3)
+    pos.set([p.getX(i) - nr.getX(i) * t, p.getY(i) - nr.getY(i) * t, p.getZ(i) - nr.getZ(i) * t], (count + i) * 3)
+  }
+  const src = sheet.index.array
+  const idx = []
+  for (let k = 0; k < src.length; k += 3) {
+    idx.push(src[k], src[k + 1], src[k + 2])
+    idx.push(count + src[k], count + src[k + 2], count + src[k + 1])
+  }
+  const border = gridBorder(n)
+  for (let k = 0; k < border.length; k++) {
+    const a = border[k]
+    const b = border[(k + 1) % border.length]
+    idx.push(a, count + a, b, b, count + a, count + b)
+  }
+  const geo = new THREE.BufferGeometry()
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3))
+  geo.setIndex(idx)
   geo.computeVertexNormals()
   return geo
 }
 
-// Gota de queso colgando del borde: lágrima (ancha arriba donde se une, redonda abajo).
+// Gota de queso colgando del borde: base ancha pegada a la loncha, cuello y gota redonda abajo.
 export function dripGeometry(q = 1) {
   const pts = []
-  const n = seg(16, q)
+  const n = seg(20, q)
   for (let i = 0; i <= n; i++) {
-    const t = i / n // 0 = punta inferior, 1 = arriba
-    const r = 0.055 * Math.sin(Math.PI * Math.min(1, t * 1.15)) * (0.55 + 0.45 * t) + (t > 0.9 ? 0.03 * (t - 0.9) * 10 : 0)
-    pts.push(new THREE.Vector2(Math.max(0.0001, r), -0.22 + t * 0.24))
+    const t = i / n // 0 = abajo, 1 = arriba
+    const bulb = Math.sin(Math.min(1, t / 0.45) * Math.PI) * 0.05 // gota redonda abajo
+    const neck = 0.026 + 0.03 * Math.pow(Math.max(0, t - 0.45) / 0.55, 2) // se ensancha al unirse al queso
+    const r = t < 0.45 ? Math.max(bulb, t > 0.3 ? neck : 0) : neck
+    pts.push(new THREE.Vector2(Math.max(0.0001, r), -0.15 + t * 0.17))
   }
-  return new THREE.LatheGeometry(pts, seg(14, q))
+  return new THREE.LatheGeometry(pts, seg(16, q))
 }
 
 // Charco de salsa o mermelada: disco irregular, ligeramente abombado.

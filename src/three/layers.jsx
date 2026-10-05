@@ -40,7 +40,7 @@ export const SAUCE_COLORS = {
 }
 
 export const CHEESES = {
-  cheddar: { color: '#f39a1e', melt: 1 },
+  cheddar: { color: '#f5a01a', melt: 1 },
   ahumado: { color: '#d7822f', melt: 0.85 },
   curado: { color: '#efd38a', melt: 0.25 },
   cabra: { color: '#f5f0e4', melt: 0.6 },
@@ -59,10 +59,12 @@ function BunTop({ q }) {
       <meshPhysicalMaterial
         map={tex.map}
         bumpMap={tex.bumpMap}
-        bumpScale={1}
-        roughness={0.42}
-        clearcoat={0.55}
-        clearcoatRoughness={0.28}
+        bumpScale={2.2}
+        roughness={0.46}
+        clearcoat={0.6}
+        clearcoatRoughness={0.32}
+        sheen={0.25}
+        sheenColor="#ffb870"
       />
     </mesh>
   )
@@ -73,24 +75,24 @@ function BunBottom({ q }) {
   const tex = bunBottomTextures(texSize(q))
   return (
     <mesh geometry={geo} castShadow receiveShadow>
-      <meshStandardMaterial map={tex.map} bumpMap={tex.bumpMap} bumpScale={3} roughness={0.78} />
+      <meshPhysicalMaterial map={tex.map} bumpMap={tex.bumpMap} bumpScale={3} roughness={0.7} clearcoat={0.2} clearcoatRoughness={0.5} />
     </mesh>
   )
 }
 
 function Patty({ q, seed = 1 }) {
-  const geo = useMemo(() => pattyGeometry(q, 1.12, 0.18, seed), [q, seed])
+  const geo = useMemo(() => pattyGeometry(q, 1.14, 0.2, seed), [q, seed])
   const tex = pattyTextures(texSize(q))
   return (
-    <mesh geometry={geo} position-y={0.09} castShadow receiveShadow>
+    <mesh geometry={geo} position-y={0.1} castShadow receiveShadow>
       <meshPhysicalMaterial
         vertexColors
         map={tex.map}
         bumpMap={tex.bumpMap}
-        bumpScale={4}
-        roughness={0.5}
-        clearcoat={0.3}
-        clearcoatRoughness={0.45}
+        bumpScale={7}
+        roughness={0.55}
+        clearcoat={0.55}
+        clearcoatRoughness={0.32}
       />
     </mesh>
   )
@@ -114,22 +116,22 @@ function Cheese({ q, kind = 'cheddar', seed = 1 }) {
     () =>
       new THREE.MeshPhysicalMaterial({
         color,
-        roughness: 0.3,
+        roughness: 0.24,
         clearcoat: 1,
-        clearcoatRoughness: 0.08,
+        clearcoatRoughness: 0.06,
+        sheen: 0.6,
+        sheenColor: new THREE.Color(color).offsetHSL(0, 0.1, 0.12),
         emissive: new THREE.Color(color),
-        emissiveIntensity: 0.1, // finge la luz que atraviesa el queso fundido
+        emissiveIntensity: 0.14, // finge la luz que atraviesa el queso fundido
         side: THREE.DoubleSide,
       }),
     [color],
   )
-  // Gotas en dos de las esquinas que cuelgan más
-  const drips = melt > 0.5 ? [[0.97, -0.13, 0.32], [-0.5, -0.15, -0.96], [0.15, -0.1, 1.04]] : []
   return (
-    <group rotation-y={seed * 0.9} position-y={0.012}>
+    <group rotation-y={seed * 0.9} position-y={0.02}>
       <mesh geometry={geo} material={mat} castShadow receiveShadow />
-      {drips.map(([x, y, z], i) => (
-        <mesh key={i} geometry={drip} material={mat} position={[x, y, z]} scale={[1, 0.8 + i * 0.35, 1]} />
+      {geo.userData.drips.map((v, i) => (
+        <mesh key={i} geometry={drip} material={mat} position={[v.x * 0.97, v.y + 0.005, v.z * 0.97]} scale={[1, 0.7 + (i % 3) * 0.25, 1]} castShadow />
       ))}
     </group>
   )
@@ -278,7 +280,7 @@ function GoatRound({ q }) {
 export const LAYERS = {
   bunBottom: { Component: BunBottom, height: 0.31 },
   bunTop: { Component: BunTop, height: 0.72 },
-  patty: { Component: Patty, height: 0.16 },
+  patty: { Component: Patty, height: 0.18 },
   chicken: { Component: Chicken, height: 0.24 },
   cheese: { Component: Cheese, height: 0.02 },
   sauce: { Component: Sauce, height: 0.03 },

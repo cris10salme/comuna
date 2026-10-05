@@ -9,8 +9,8 @@ export default function Studio({ shadows }) {
       <ambientLight intensity={0.18} color="#ffd9b0" />
       <directionalLight
         position={[-3.5, 5, 3.5]}
-        intensity={2.8}
-        color="#fff0dc"
+        intensity={3.2}
+        color="#ffeedd"
         castShadow={shadows}
         shadow-mapSize={[1024, 1024]}
         shadow-bias={-0.0004}
@@ -19,7 +19,9 @@ export default function Studio({ shadows }) {
         shadow-camera-top={3}
         shadow-camera-bottom={-3}
       />
-      <spotLight position={[3.5, 2.5, -4]} intensity={30} angle={0.6} penumbra={0.8} color="#ffa860" />
+      {/* Contraluz: recorta el borde del pan y hace brillar el queso y la salsa */}
+      <spotLight position={[3.5, 2.5, -4]} intensity={48} angle={0.6} penumbra={0.8} color="#ffa860" />
+      <spotLight position={[-4, 1.2, -3]} intensity={18} angle={0.7} penumbra={1} color="#ffd2a0" />
       <pointLight position={[0, -0.5, 4]} intensity={3} color="#fff1e0" distance={10} />
       <Environment resolution={128} frames={1}>
         <Lightformer form="rect" intensity={3} color="#fff0de" position={[-3, 3, 3]} scale={[4, 2, 1]} target={[0, 0, 0]} />

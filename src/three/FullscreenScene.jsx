@@ -1,9 +1,12 @@
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls, PerformanceMonitor } from '@react-three/drei'
+import { EffectComposer, N8AO, ToneMapping } from '@react-three/postprocessing'
+import { ToneMappingMode } from 'postprocessing'
 import * as THREE from 'three'
 import Burger, { rowX, ROW_SPACING } from './Burger'
 import Studio, { fitDistance } from './Studio'
+import { canvasDpr } from '../lib/device'
 
 const ease = (dt, speed = 5) => 1 - Math.exp(-dt * speed)
 
@@ -58,7 +61,8 @@ function Rig({ mode, focus, dragRef, n, controlsRef, reducedMotion }) {
 
 export default function FullscreenScene({ burgerId, recipe, mode, focus, dragRef, labelEls, tier, reducedMotion, onLayerTap, onInteract }) {
   const controlsRef = useRef()
-  const [dpr, setDpr] = useState(tier === 'high' ? 2 : 1.5)
+  const [dpr, setDpr] = useState(() => canvasDpr(tier, 2))
+  const [aoOn, setAoOn] = useState(true)
   const n = recipe.length
   const shadows = tier === 'high'
 
@@ -69,7 +73,13 @@ export default function FullscreenScene({ burgerId, recipe, mode, focus, dragRef
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       camera={{ fov: 32, position: [0, 3, 9], near: 0.1, far: 120 }}
     >
-      <PerformanceMonitor onDecline={() => setDpr(1.25)} />
+      <PerformanceMonitor
+        onDecline={() => {
+          // Si va a tirones: primero se quita la oclusión, luego se baja la resolución
+          if (aoOn) setAoOn(false)
+          else setDpr(1.25)
+        }}
+      />
       <Studio shadows={shadows} />
       <Rig key={burgerId} mode={mode} focus={focus} dragRef={dragRef} n={n} controlsRef={controlsRef} reducedMotion={reducedMotion} />
       <OrbitControls
@@ -87,6 +97,13 @@ export default function FullscreenScene({ burgerId, recipe, mode, focus, dragRef
         autoRotateSpeed={0.9}
         onStart={onInteract}
       />
+      {/* Sombras de contacto entre capas (oclusión ambiental): solo en equipos con calidad alta */}
+      {tier === 'high' && aoOn && (
+        <EffectComposer multisampling={4} enableNormalPass={false}>
+          <N8AO halfRes aoRadius={0.45} distanceFalloff={0.6} intensity={2.4} color="#1a0d05" />
+          <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
+        </EffectComposer>
+      )}
       <Suspense fallback={null}>
         <Burger
           key={burgerId}

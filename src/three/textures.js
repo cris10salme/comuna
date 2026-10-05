@@ -60,7 +60,7 @@ function domeXZ(u, v) {
 
 const radialBump = (u, v) => {
   const [x, z, h] = domeXZ(u, v)
-  const n = 128 + (fbm(x * 7 + 50, z * 7 + h * 3, 99, 3) - 0.5) * 230
+  const n = 128 + (fbm(x * 9 + 50, z * 9 + h * 4, 99, 3) - 0.5) * 200
   return [n, n, n]
 }
 
@@ -107,9 +107,9 @@ function paint(key, size, colorFn, { bump = false, bumpFn } = {}) {
 // Pan superior. UV de torno: v=0 base cortada, v=1 coronilla. u da la vuelta (sin costura visible: ruido periódico en u).
 export function bunTopTextures(size) {
   const crumb = hex(0xe2b77a)
-  const pale = hex(0xe6b06a)
-  const golden = hex(0xb4641f)
-  const deep = hex(0x7a3a10)
+  const pale = hex(0xe2a65c)
+  const golden = hex(0xa5551a)
+  const deep = hex(0x5e260a)
   return paint(`bunTop${size}`, size, (u, v) => {
     const [x, z, h] = domeXZ(u, v)
     const mottle = fbm(x * 3 + 10, z * 3 + h * 2, 3)
@@ -131,9 +131,9 @@ export function bunTopTextures(size) {
 
 // Pan inferior: base de corteza y cara superior de miga tostada a la plancha.
 export function bunBottomTextures(size) {
-  const crust = hex(0xc98a43)
+  const crust = hex(0xa95f22)
   const crumb = hex(0xe7c48c)
-  const toasted = hex(0xb7702e)
+  const toasted = hex(0xa65e22)
   return paint(`bunBottom${size}`, size, (u, v) => {
     const a = u * Math.PI * 2
     const n = fbm(Math.cos(a) * 3 + v * 8, Math.sin(a) * 3, 11)
@@ -153,14 +153,16 @@ export function bunBottomTextures(size) {
 
 // Carne smash, vista en planta (UV plano). Costra de Maillard con vetas y puntos tostados.
 export function pattyTextures(size) {
-  const base = hex(0x84492a)
-  const crust = hex(0x3b1d0e)
-  const caramel = hex(0xa65f2e)
+  const base = hex(0x6e3a1d)
+  const crust = hex(0x2b1307)
+  const caramel = hex(0xa0582a)
   return paint(`patty${size}`, size, (u, v) => {
     const n = fbm(u * 10, v * 10, 21)
     const fine = fbm(u * 60, v * 60, 23, 2)
     let c = mix(base, crust, smooth(0.35, 0.75, n))
     c = mix(c, caramel, Math.max(0, fine - 0.55) * 1.6)
+    // Puntos tostados casi negros, como la costra de la plancha
+    c = mix(c, hex(0x160904), smooth(0.68, 0.8, fbm(u * 34 + 7, v * 34 + 7, 27, 2)) * 0.8)
     return c
   }, { bump: true })
 }
