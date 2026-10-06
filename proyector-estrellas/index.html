@@ -539,7 +539,7 @@ body.sin-scroll{overflow:hidden}
       <article class="tarjeta aparece" data-tilt>
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></div>
         <h3>Discos intercambiables</h3>
-        <p>Galaxias, nebulosas, planetas, auroras y más. Elige el kit de 6, 12 o 24 discos y cambia de cielo cada noche.</p>
+        <p>Galaxias, nebulosas, planetas, auroras y más. Elige el kit de 5, 15 o 20 discos y cambia de cielo cada noche.</p>
       </article>
       <article class="tarjeta aparece" data-tilt>
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11V5a2 2 0 0 1 4 0v6M13 10a2 2 0 0 1 4 0v3a7 7 0 0 1-7 7h0a6 6 0 0 1-5-3l-2-3.5a1.6 1.6 0 0 1 2.7-1.7L9 14"/></svg></div>
@@ -612,7 +612,7 @@ body.sin-scroll{overflow:hidden}
 </section>
 
 <!-- =====================================================================
-     SECCIÓN 8 · KITS (6, 12, 24 discos). Precios en CONFIG.kits
+     SECCIÓN 8 · KITS (5, 15, 20 discos). Precios en CONFIG.kits
      ===================================================================== -->
 <section class="seccion" id="kits">
   <div class="contenedor">
@@ -675,7 +675,7 @@ body.sin-scroll{overflow:hidden}
       <div class="faq-item aparece"><h3><button class="faq-btn" aria-expanded="false">¿Cómo se alimenta? ¿Lleva pilas?<span class="mas"></span></button></h3>
         <div class="faq-panel"><div><p>Funciona por USB a 5 V, sin pilas. Puedes conectarlo al cargador del móvil, al ordenador o a una batería externa. <span class="placeholder">[CONFIRMA SI INCLUYE ADAPTADOR DE ENCHUFE]</span></p></div></div></div>
       <div class="faq-item aparece"><h3><button class="faq-btn" aria-expanded="false">¿Qué diferencia hay entre los kits?<span class="mas"></span></button></h3>
-        <div class="faq-panel"><div><p>El proyector es el mismo. Cambia el número de discos que incluye: 6, 12 o 24 cielos distintos.</p></div></div></div>
+        <div class="faq-panel"><div><p>El proyector es el mismo. Cambia el número de discos que incluye: 5, 15 o 20 cielos distintos.</p></div></div></div>
       <div class="faq-item aparece"><h3><button class="faq-btn" aria-expanded="false">¿Qué tamaño tiene la proyección?<span class="mas"></span></button></h3>
         <div class="faq-panel"><div><p>Depende de la distancia al techo o a la pared: cuanto más lejos, más grande. <span class="placeholder">[TAMAÑO / DISTANCIA RECOMENDADA SEGÚN EL FABRICANTE]</span></p></div></div></div>
       <div class="faq-item aparece"><h3><button class="faq-btn" aria-expanded="false">¿Se puede dejar encendido toda la noche?<span class="mas"></span></button></h3>
@@ -754,7 +754,7 @@ body.sin-scroll{overflow:hidden}
 <script>
 /* =====================================================================
    CONFIG · CAMBIA AQUÍ TUS DATOS
-   Los precios son DE EJEMPLO para que la página funcione. Pon los tuyos.
+   Precios reales: tachado = precio anterior, precio = con el 60 % de descuento.
    ===================================================================== */
 var CONFIG = {
   marca: '[NOMBRE DE TU MARCA]',
@@ -768,14 +768,14 @@ var CONFIG = {
 
   // Kits: cada uno es una variante de tu producto en Shopify.
   kits: [
-    { id: 'k6',  nombre: 'Kit 6 discos',  detalle: 'Para empezar',             precio: 24.99, precioAnterior: 49.99, varianteId: '', insignia: '' },              // ← EJEMPLO
-    { id: 'k12', nombre: 'Kit 12 discos', detalle: 'El más elegido',           precio: 29.99, precioAnterior: 64.99, varianteId: '', insignia: 'Más vendido', top: true }, // ← EJEMPLO
-    { id: 'k24', nombre: 'Kit 24 discos', detalle: 'Un cielo distinto cada noche', precio: 39.99, precioAnterior: 89.99, varianteId: '', insignia: 'Mejor precio por disco' } // ← EJEMPLO
+    { id: 'k5',  nombre: 'Proyector + 5 discos',  discos: 5,  detalle: 'Para empezar',                  precio: 32.38, precioAnterior: 80.95,  varianteId: '57453766803796', insignia: '' },
+    { id: 'k15', nombre: 'Proyector + 15 discos', discos: 15, detalle: 'El más elegido',                precio: 40.00, precioAnterior: 100.00, varianteId: '57453766836564', insignia: 'Más vendido', top: true },
+    { id: 'k20', nombre: 'Proyector + 20 discos', discos: 20, detalle: 'Un cielo distinto cada noche',  precio: 51.18, precioAnterior: 127.95, varianteId: '57453766869332', insignia: 'Mejor precio por disco' }
   ],
-  kitInicial: 'k12',
+  kitInicial: 'k15',
 
   // Pago en Shopify: con varianteId en los kits, "Finalizar compra" lleva al pago.
-  tienda: '',                                // p. ej. 'https://mitienda.myshopify.com' (no hace falta dentro de Shopify)
+  tienda: 'https://vnre7x-8u.myshopify.com', // p. ej. 'https://mitienda.myshopify.com' (no hace falta dentro de Shopify)
   urlProducto: '[URL DE TU PRODUCTO EN SHOPIFY]',
   codigoDescuento: ''
 };
@@ -955,7 +955,7 @@ var CONFIG = {
   var seleccion = kitPorId(CONFIG.kitInicial) || CONFIG.kits[0];
   CONFIG.kits.forEach(function(k){
     var b = document.createElement('button'); b.type='button'; b.className='pack aparece'; b.setAttribute('role','radio'); b.dataset.id = k.id;
-    var porDisco = k.precio / parseInt(k.nombre.replace(/\D/g,''),10);
+    var porDisco = k.precio / k.discos;
     b.innerHTML = (k.insignia ? '<span class="insignia'+(k.top?' insignia--top':'')+'">'+k.insignia+'</span>' : '') +
       '<span class="radio" aria-hidden="true"></span>' +
       '<span class="info"><span class="nombre">'+k.nombre+'</span><span class="detalle">'+k.detalle+(isFinite(porDisco)?' · '+euros(redondear(porDisco))+'/disco':'')+'</span></span>' +
