@@ -1,0 +1,1183 @@
+{% layout none %}{% raw %}<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Proyector de Estrellas · Convierte tu habitación en el universo</title>
+<meta name="description" content="Proyector de cielo estrellado USB con discos intercambiables: galaxias, auroras, océano y luna en el techo de tu habitación. Oferta por tiempo limitado.">
+<meta name="theme-color" content="#06071a">
+
+<!--
+  =====================================================================
+  LANDING · PROYECTOR DE ESTRELLAS USB
+  ---------------------------------------------------------------------
+  Un único archivo: HTML + CSS + JavaScript.
+
+  1. PRECIOS, KITS, FECHAS, ENLACES Y TEXTOS CLAVE → bloque "CONFIG" en el
+     <script> del final. Cada kit (6, 12 o 24 discos) tiene su precio y su
+     ID de variante de Shopify.
+  2. TEXTOS DE CADA SECCIÓN → en el HTML, cada sección lleva un comentario
+     "SECCIÓN N".
+  3. FOTOS DEL PRODUCTO → CONFIG.imagenProducto (URL). Si la dejas vacía se
+     muestra solo la proyección animada.
+  4. RESEÑAS → busca "[RESEÑA REAL]".
+
+  Todo lo que aparece entre [CORCHETES] es un dato que tienes que poner tú.
+
+  USO EN SHOPIFY: Tema → Personalizar → sección "Liquid personalizado" y
+  pega desde <style> hasta el último </script>. También funciona como
+  página independiente subiendo este archivo tal cual.
+  =====================================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================================
+   1. VARIABLES DE DISEÑO
+   ===================================================================== */
+:root{
+  --noche:#06071a;
+  --noche-2:#0c0e2a;
+  --noche-3:#151839;
+  --noche-4:#1f2350;
+  --linea:rgba(160,170,255,.14);
+  --texto:#f2f3ff;
+  --texto-2:#b8bbe0;
+  --texto-3:#878ab5;
+  --violeta:#8b5cf6;
+  --violeta-claro:#c4b5fd;
+  --cian:#22d3ee;
+  --rosa:#f472b6;
+  --oro:#fcd34d;
+  --rojo:#f43f5e;
+  --verde:#34d399;
+  --grad:linear-gradient(120deg,#22d3ee 0%,#8b5cf6 50%,#f472b6 100%);
+  --radio:20px;
+  --radio-s:14px;
+  --f-titulo:'Sora',system-ui,sans-serif;
+  --f-texto:'Inter',system-ui,sans-serif;
+  --ancho:1160px;
+  --alto-barra:44px;
+}
+
+/* =====================================================================
+   2. BASE
+   ===================================================================== */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--noche);color:var(--texto);font-family:var(--f-texto);
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  padding-top:var(--alto-barra);
+}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+button{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--f-titulo);line-height:1.12;margin:0 0 .5em;letter-spacing:-.02em}
+h1{font-size:clamp(2.1rem,7.6vw,4rem);font-weight:800}
+h2{font-size:clamp(1.65rem,5.4vw,2.7rem);font-weight:700}
+h3{font-size:1.12rem;font-weight:600}
+p{margin:0 0 1em}
+.contenedor{width:100%;max-width:var(--ancho);margin:0 auto;padding:0 20px}
+.seccion{padding:76px 0;position:relative}
+.seccion--alt{background:linear-gradient(180deg,var(--noche-2),var(--noche))}
+.antetitulo{display:inline-block;font-size:.76rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--cian);margin-bottom:12px}
+.centrado{text-align:center}
+.centrado .intro{max-width:640px;margin-left:auto;margin-right:auto}
+.intro{color:var(--texto-2);font-size:1.06rem}
+.degradado{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.placeholder{background:rgba(139,92,246,.15);border:1px dashed rgba(196,181,253,.55);border-radius:6px;padding:0 .3em;color:var(--violeta-claro)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+:focus-visible{outline:2px solid var(--cian);outline-offset:3px}
+
+/* =====================================================================
+   3. BOTONES (brillo + pulso)
+   ===================================================================== */
+.btn{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:56px;padding:16px 30px;border:0;border-radius:999px;cursor:pointer;text-decoration:none;
+  font-family:var(--f-titulo);font-weight:700;font-size:1.04rem;color:#fff;
+  background:linear-gradient(120deg,#06b6d4,#7c3aed 55%,#db2777);
+  box-shadow:0 10px 34px rgba(124,58,237,.45),inset 0 1px 0 rgba(255,255,255,.3);
+  overflow:hidden;isolation:isolate;transition:transform .2s,box-shadow .2s;animation:pulso 2.6s ease-in-out infinite;
+}
+.btn::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-120%);animation:brillo 3.4s ease-in-out infinite}
+.btn:hover{transform:translateY(-2px);box-shadow:0 16px 44px rgba(124,58,237,.6)}
+.btn:active{transform:scale(.98)}
+.btn--ancho{width:100%}
+.btn svg{width:20px;height:20px;flex:none}
+.btn--secundario{background:none;border:1px solid var(--linea);box-shadow:none;animation:none;min-height:46px;margin-top:10px}
+.btn--secundario::after{display:none}
+@keyframes pulso{0%,100%{box-shadow:0 10px 34px rgba(124,58,237,.45),0 0 0 0 rgba(139,92,246,.5)}50%{box-shadow:0 10px 34px rgba(124,58,237,.45),0 0 0 12px rgba(139,92,246,0)}}
+@keyframes brillo{0%,55%{transform:translateX(-120%)}85%,100%{transform:translateX(120%)}}
+
+/* =====================================================================
+   4. SECCIÓN 1 · BARRA DE OFERTA + CUENTA ATRÁS
+   ===================================================================== */
+.barra{
+  position:fixed;top:0;left:0;right:0;z-index:50;height:var(--alto-barra);background:#000;
+  border-bottom:1px solid rgba(139,92,246,.35);display:flex;align-items:center;justify-content:center;gap:12px;
+  padding:0 12px;font-size:.82rem;font-weight:600;white-space:nowrap;color:var(--violeta-claro);
+}
+.barra strong{color:#fff}
+.barra .reloj-mini{display:flex;gap:4px;font-variant-numeric:tabular-nums;color:#fff}
+.barra .reloj-mini span{background:var(--rojo);border-radius:5px;padding:1px 6px;font-weight:700}
+.barra .texto-largo{display:none}
+@media (min-width:640px){.barra{font-size:.9rem}.barra .texto-largo{display:inline}}
+.oferta-fin .reloj,.oferta-fin .reloj-mini{display:none!important}
+.aviso-fin{display:none;font-weight:800;color:var(--rojo)}
+.oferta-fin .aviso-fin{display:inline}
+
+/* =====================================================================
+   5. CABECERA (fija) + BOTÓN DEL CARRITO
+   ===================================================================== */
+.cabecera{position:sticky;top:var(--alto-barra);z-index:45;padding:12px 0;border-bottom:1px solid var(--linea);background:rgba(6,7,26,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.cabecera .contenedor{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-family:var(--f-titulo);font-weight:800;font-size:1.08rem;text-decoration:none}
+.cabecera .derecha{display:flex;align-items:center;gap:14px}
+.cabecera .envio{font-size:.8rem;color:var(--texto-2);display:flex;align-items:center;gap:6px}
+.cabecera .envio svg{width:18px;height:18px;color:var(--cian)}
+@media (max-width:420px){.cabecera .envio{display:none}}
+.btn-carrito{position:relative;flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--linea);background:var(--noche-3);display:grid;place-items:center;cursor:pointer;transition:border-color .2s}
+.btn-carrito:hover{border-color:var(--violeta)}
+.btn-carrito svg{width:22px;height:22px;color:var(--violeta-claro)}
+.btn-carrito .contador{position:absolute;top:-4px;right:-4px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:var(--rosa);color:#fff;font-size:.72rem;font-weight:800;display:grid;place-items:center;transform:scale(0);transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+.btn-carrito .contador.lleno{transform:scale(1)}
+.btn-carrito.salto{animation:salto .5s}
+@keyframes salto{30%{transform:scale(1.18)}60%{transform:scale(.94)}}
+
+/* =====================================================================
+   6. SECCIÓN 2 · HERO CON CIELO ANIMADO
+   ===================================================================== */
+.hero{position:relative;overflow:hidden;min-height:calc(100svh - var(--alto-barra) - 69px);display:flex;align-items:center;padding:56px 0 64px}
+.hero canvas.cielo{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.hero::after{content:"";position:absolute;inset:auto 0 0;height:40%;background:linear-gradient(transparent,var(--noche));z-index:1;pointer-events:none}
+.hero .contenedor{position:relative;z-index:2}
+.hero-grid{display:grid;gap:34px;align-items:center}
+.etiqueta{display:inline-flex;align-items:center;gap:8px;font-size:.8rem;font-weight:700;padding:6px 12px;border-radius:999px;background:rgba(6,7,26,.6);border:1px solid rgba(34,211,238,.4);color:#a5f3fc;margin-bottom:18px;backdrop-filter:blur(6px)}
+.etiqueta .punto{width:8px;height:8px;border-radius:50%;background:var(--cian);box-shadow:0 0 10px var(--cian);animation:latido 1.4s infinite}
+@keyframes latido{50%{opacity:.3}}
+.hero h1{text-shadow:0 4px 30px rgba(6,7,26,.6)}
+.hero .sub{color:#d6d8f5;font-size:1.1rem;max-width:540px;text-shadow:0 2px 14px rgba(6,7,26,.8)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.chips span{font-size:.8rem;font-weight:600;padding:6px 12px;border-radius:999px;background:rgba(21,24,57,.7);border:1px solid var(--linea);backdrop-filter:blur(6px)}
+.precio-bloque{display:flex;align-items:flex-end;flex-wrap:wrap;gap:6px 14px;margin:22px 0 6px}
+.precio-antes{color:var(--texto-3);text-decoration:line-through;font-size:1.25rem}
+.precio-ahora{font-family:var(--f-titulo);font-size:clamp(2.4rem,9vw,3.2rem);font-weight:800;line-height:1}
+.etiqueta-dto{background:var(--rojo);color:#fff;font-weight:800;font-size:.95rem;padding:5px 10px;border-radius:8px;transform:rotate(-3deg);align-self:center;box-shadow:0 6px 20px rgba(244,63,94,.4)}
+.precio-nota{font-size:.88rem;color:var(--texto-2);margin-bottom:18px}
+.reloj-titulo{font-size:.78rem;font-weight:700;color:var(--cian);letter-spacing:.08em;text-transform:uppercase}
+.reloj{display:flex;gap:8px;margin:6px 0 20px}
+.reloj .unidad{min-width:62px;text-align:center;background:rgba(21,24,57,.75);border:1px solid var(--linea);border-radius:12px;padding:8px 6px 6px;backdrop-filter:blur(6px)}
+.reloj .num{display:block;font-family:var(--f-titulo);font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.reloj .lbl{display:block;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--texto-3)}
+.hero-cta{display:flex;flex-direction:column;gap:12px;max-width:440px}
+.confianza{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.82rem;color:var(--texto-2)}
+.confianza span{display:flex;align-items:center;gap:6px}
+.confianza svg{width:16px;height:16px;color:var(--cian);flex:none}
+.foto-producto{position:relative;max-width:440px;margin:0 auto;width:100%}
+.foto-producto img{width:100%;border-radius:var(--radio);box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px var(--linea)}
+.foto-producto:empty{display:none}
+@media (min-width:900px){.hero-grid{grid-template-columns:1.1fr .9fr;gap:48px}}
+
+/* =====================================================================
+   7. SECCIÓN 3 · PROBLEMA
+   ===================================================================== */
+.problemas{display:grid;gap:14px;margin:34px 0}
+.problema{display:flex;gap:14px;align-items:flex-start;padding:18px;border-radius:var(--radio-s);background:var(--noche-2);border:1px solid var(--linea)}
+.problema .ico{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:rgba(244,63,94,.12);color:#fb7185}
+.problema .ico svg{width:22px;height:22px}
+.problema h3{margin-bottom:4px;font-size:1.02rem}
+.problema p{margin:0;color:var(--texto-2);font-size:.95rem}
+.giro{margin-top:34px;padding:30px 22px;border-radius:var(--radio);text-align:center;background:radial-gradient(ellipse at top,rgba(139,92,246,.22),transparent 70%),var(--noche-2);border:1px solid rgba(139,92,246,.35)}
+.giro h3{font-size:1.45rem}
+.giro p{color:var(--texto-2);max-width:620px;margin:0 auto}
+@media (min-width:760px){.problemas{grid-template-columns:repeat(3,1fr)}}
+
+/* =====================================================================
+   8. SECCIÓN 4 · DEMO: ELIGE UN DISCO
+   ===================================================================== */
+.demo{position:relative;max-width:900px;margin:34px auto 0;border-radius:var(--radio);overflow:hidden;aspect-ratio:16/11;border:1px solid var(--linea);box-shadow:0 30px 80px rgba(0,0,0,.55);background:#000}
+.demo canvas{position:absolute;inset:0;width:100%;height:100%}
+.demo .habitacion{position:absolute;inset:auto 0 0;width:100%;height:auto;pointer-events:none}
+.demo .nombre-disco{position:absolute;top:14px;left:14px;padding:6px 12px;border-radius:999px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);font-size:.8rem;font-weight:700;letter-spacing:.04em}
+.discos{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.disco{
+  display:flex;align-items:center;gap:10px;padding:8px 14px 8px 8px;border-radius:999px;cursor:pointer;
+  background:var(--noche-2);border:1px solid var(--linea);font-weight:600;font-size:.9rem;transition:border-color .2s,transform .2s;
+}
+.disco:hover{transform:translateY(-2px)}
+.disco .muestra{width:34px;height:34px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.15)}
+.disco[aria-pressed="true"]{border-color:var(--violeta);background:linear-gradient(120deg,rgba(34,211,238,.12),rgba(139,92,246,.2))}
+@media (max-width:600px){.discos{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;margin-left:-20px;margin-right:-20px;padding:0 20px 6px;scrollbar-width:none}.discos::-webkit-scrollbar{display:none}.disco{flex:none}}
+.demo-nota{text-align:center;font-size:.82rem;color:var(--texto-3);margin-top:12px}
+
+/* =====================================================================
+   9. SECCIÓN 5 · BENEFICIOS (tarjetas con tilt 3D)
+   ===================================================================== */
+.beneficios{display:grid;gap:16px;margin-top:36px}
+.tarjeta{
+  position:relative;padding:26px 22px;border-radius:var(--radio);background:linear-gradient(160deg,var(--noche-3),var(--noche-2));
+  border:1px solid var(--linea);transform-style:preserve-3d;transition:transform .25s ease-out,border-color .3s;
+  --rx:0deg;--ry:0deg;--mx:50%;--my:50%;transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
+}
+.tarjeta::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(380px circle at var(--mx) var(--my),rgba(139,92,246,.2),transparent 45%)}
+.tarjeta:hover{border-color:rgba(139,92,246,.5)}
+.tarjeta:hover::before,.tarjeta.activa::before{opacity:1}
+.tarjeta .ico{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;margin-bottom:16px;background:var(--grad);color:#fff;transform:translateZ(14px);box-shadow:0 10px 26px rgba(139,92,246,.35)}
+.tarjeta .ico svg{width:28px;height:28px}
+.tarjeta h3{transform:translateZ(8px)}
+.tarjeta p{color:var(--texto-2);margin:0;font-size:.95rem}
+@media (min-width:640px){.beneficios{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:980px){.beneficios{grid-template-columns:repeat(3,1fr)}}
+
+/* =====================================================================
+   10. SECCIÓN 6 · PARA QUIÉN ES
+   ===================================================================== */
+.para-quien{display:grid;gap:14px;margin-top:34px}
+.perfil{padding:22px;border-radius:var(--radio-s);background:var(--noche-2);border:1px solid var(--linea);display:flex;gap:16px;align-items:flex-start}
+.perfil .emoji{flex:none;width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:1.6rem;background:var(--noche-4)}
+.perfil h3{margin-bottom:4px}
+.perfil p{margin:0;color:var(--texto-2);font-size:.95rem}
+@media (min-width:760px){.para-quien{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1000px){.para-quien{grid-template-columns:repeat(3,1fr)}}
+.fuentes{margin-top:30px;padding:22px;border-radius:var(--radio);background:var(--noche-2);border:1px solid var(--linea);text-align:center}
+.fuentes h3{font-size:1rem;margin-bottom:14px;color:var(--violeta-claro)}
+.fuentes ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:12px}
+.fuentes li{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:.85rem;color:var(--texto-2)}
+.fuentes li svg{width:34px;height:34px;color:var(--cian)}
+.ficha{display:grid;gap:18px;margin-top:34px}
+.ficha-bloque{padding:24px;border-radius:var(--radio);background:var(--noche-2);border:1px solid var(--linea)}
+.ficha-bloque h3{margin-bottom:12px}
+.ficha dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:10px 18px;font-size:.95rem}
+.ficha dt{color:var(--texto-3)}
+.ficha dd{margin:0;font-weight:600}
+.ficha ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.ficha li{display:flex;gap:10px;align-items:center;color:var(--texto-2)}
+.ficha li b{color:var(--texto)}
+.ficha li svg{width:20px;height:20px;color:var(--verde);flex:none}
+@media (min-width:760px){.ficha{grid-template-columns:1fr 1fr}}
+
+/* =====================================================================
+   11. SECCIÓN 7 · CÓMO SE USA
+   ===================================================================== */
+.pasos{display:grid;gap:18px;margin-top:38px}
+.paso{position:relative;padding:30px 22px 24px;border-radius:var(--radio);background:var(--noche-2);border:1px solid var(--linea)}
+.paso .numero{position:absolute;top:-17px;left:22px;width:40px;height:40px;border-radius:50%;background:var(--grad);color:#fff;display:grid;place-items:center;font-family:var(--f-titulo);font-weight:800;box-shadow:0 0 0 4px var(--noche)}
+.paso .ico{width:46px;height:46px;color:var(--cian);margin:4px 0 12px}
+.paso p{color:var(--texto-2);margin:0;font-size:.95rem}
+@media (min-width:760px){.pasos{grid-template-columns:repeat(3,1fr)}}
+
+/* =====================================================================
+   12. SECCIÓN 8 · KITS (selector) + RESUMEN
+   ===================================================================== */
+.packs{display:grid;gap:14px;margin:36px auto 0;max-width:980px}
+.pack{position:relative;display:flex;gap:14px;align-items:center;padding:20px 18px;border-radius:var(--radio);background:var(--noche-2);border:2px solid var(--linea);cursor:pointer;text-align:left;width:100%;transition:border-color .2s,transform .2s,background .2s}
+.pack:hover{transform:translateY(-2px)}
+.pack[aria-checked="true"]{border-color:var(--violeta);background:linear-gradient(160deg,rgba(139,92,246,.16),var(--noche-2))}
+.pack .radio{flex:none;width:24px;height:24px;border-radius:50%;border:2px solid var(--texto-3);display:grid;place-items:center}
+.pack[aria-checked="true"] .radio{border-color:var(--violeta)}
+.pack[aria-checked="true"] .radio::after{content:"";width:12px;height:12px;border-radius:50%;background:var(--violeta)}
+.pack .info{flex:1;min-width:0}
+.pack .nombre{font-family:var(--f-titulo);font-weight:700;font-size:1.08rem;display:block}
+.pack .detalle{font-size:.85rem;color:var(--texto-2)}
+.pack .precios{text-align:right;flex:none}
+.pack .p-ahora{display:block;font-family:var(--f-titulo);font-weight:800;font-size:1.3rem}
+.pack .p-antes{display:block;font-size:.85rem;color:var(--texto-3);text-decoration:line-through}
+.pack .insignia{position:absolute;top:-12px;right:16px;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--rosa);color:#fff}
+.pack .insignia--top{background:var(--grad)}
+.resumen{max-width:980px;margin:22px auto 0;padding:22px;border-radius:var(--radio);background:#04051a;border:1px solid rgba(139,92,246,.35)}
+.resumen .fila{display:flex;justify-content:space-between;gap:12px;font-size:.98rem;color:var(--texto-2);margin-bottom:6px}
+.resumen .fila strong{color:var(--texto)}
+.resumen .fila--total{font-size:1.2rem;color:var(--texto);border-top:1px solid var(--linea);padding-top:10px;margin:10px 0 18px}
+.resumen .fila--total strong{font-family:var(--f-titulo);font-size:1.6rem}
+.ahorro{color:var(--verde)!important;font-weight:700}
+.regalo{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:14px;font-size:.88rem;color:var(--texto-2)}
+@media (min-width:860px){.packs{grid-template-columns:repeat(3,1fr)}.pack{flex-direction:column;align-items:flex-start;padding:28px 22px}.pack .precios{text-align:left;margin-top:auto}}
+
+/* =====================================================================
+   13. SECCIÓN 9 · GARANTÍA + RESEÑAS
+   ===================================================================== */
+.garantia{display:grid;gap:22px;align-items:center;padding:30px 22px;border-radius:var(--radio);background:var(--noche-2);border:1px solid var(--linea)}
+.sello{width:150px;height:150px;margin:0 auto;border-radius:50%;display:grid;place-items:center;text-align:center;background:var(--grad);color:#fff;box-shadow:0 0 0 8px rgba(139,92,246,.15),0 20px 40px rgba(0,0,0,.4);font-family:var(--f-titulo)}
+.sello b{display:block;font-size:2.4rem;line-height:1}
+.sello small{display:block;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.garantia ul{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:10px}
+.garantia li{display:flex;gap:10px;color:var(--texto-2)}
+.garantia li svg{width:20px;height:20px;color:var(--verde);flex:none;margin-top:3px}
+.pagos{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.pagos span{font-size:.74rem;font-weight:700;padding:6px 10px;border-radius:8px;background:var(--noche-4);color:var(--texto-2)}
+.resenas{display:grid;gap:14px;margin-top:28px}
+.resena{margin:0;padding:20px;border-radius:var(--radio-s);background:var(--noche-2);border:1px dashed rgba(196,181,253,.35)}
+.resena .estrellas{color:var(--oro);letter-spacing:2px;margin-bottom:8px}
+.resena p{color:var(--texto-2);font-size:.95rem;margin:0 0 8px}
+.resena .autor{font-size:.82rem;color:var(--texto-3)}
+@media (min-width:760px){.garantia{grid-template-columns:200px 1fr;padding:40px}.resenas{grid-template-columns:repeat(3,1fr)}}
+
+/* =====================================================================
+   14. SECCIÓN 10 · PREGUNTAS FRECUENTES
+   ===================================================================== */
+.faq{max-width:780px;margin:32px auto 0;display:grid;gap:10px}
+.faq-item{border-radius:var(--radio-s);background:var(--noche-2);border:1px solid var(--linea);overflow:hidden}
+.faq-item h3{margin:0;font-size:1rem}
+.faq-btn{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;text-align:left;padding:18px 20px;background:none;border:0;cursor:pointer;font-weight:600;font-family:var(--f-texto);font-size:1rem}
+.faq-btn .mas{flex:none;width:28px;height:28px;border-radius:50%;border:1px solid var(--linea);position:relative;transition:background .3s}
+.faq-btn .mas::before,.faq-btn .mas::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:2px;margin:-1px 0 0 -6px;background:var(--cian);transition:transform .3s}
+.faq-btn .mas::after{transform:rotate(90deg)}
+.faq-btn[aria-expanded="true"] .mas{background:rgba(34,211,238,.15)}
+.faq-btn[aria-expanded="true"] .mas::after{transform:rotate(0)}
+.faq-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+.faq-panel > div{overflow:hidden}
+.faq-panel p{padding:0 20px 18px;margin:0;color:var(--texto-2)}
+.faq-item.abierto .faq-panel{grid-template-rows:1fr}
+
+/* =====================================================================
+   15. SECCIÓN 11 · CTA FINAL + PIE
+   ===================================================================== */
+.final{position:relative;overflow:hidden;text-align:center;padding:90px 0 96px}
+.final canvas.cielo{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.85}
+.final .contenedor{position:relative;z-index:1}
+.final .precio-bloque,.final .reloj{justify-content:center}
+.final .btn{min-width:min(100%,420px)}
+.pie{border-top:1px solid var(--linea);padding:28px 0 110px;font-size:.82rem;color:var(--texto-3);text-align:center}
+.pie nav{display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center;margin-bottom:10px}
+.pie a{text-decoration:none;color:var(--texto-2)}
+@media (min-width:900px){.pie{padding-bottom:28px}}
+
+/* =====================================================================
+   16. BOTÓN FIJO EN MÓVIL
+   ===================================================================== */
+.cta-fija{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(6,7,26,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid rgba(139,92,246,.3);display:flex;align-items:center;gap:12px;transform:translateY(110%);transition:transform .35s}
+.cta-fija.visible{transform:none}
+.cta-fija .mini-precio{flex:none;line-height:1.15}
+.cta-fija .mini-precio s{display:block;font-size:.78rem;color:var(--texto-3)}
+.cta-fija .mini-precio b{font-family:var(--f-titulo);font-size:1.25rem}
+.cta-fija .btn{flex:1;min-height:52px;padding:12px 16px;font-size:.98rem}
+@media (min-width:900px){.cta-fija{display:none}}
+
+/* =====================================================================
+   17. CARRITO (panel lateral)
+   ===================================================================== */
+.velo{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.6);opacity:0;pointer-events:none;transition:opacity .3s}
+.velo.abierto{opacity:1;pointer-events:auto}
+.carrito{position:fixed;top:0;right:0;bottom:0;z-index:61;width:min(420px,100%);display:flex;flex-direction:column;background:var(--noche-2);border-left:1px solid rgba(139,92,246,.3);box-shadow:-20px 0 60px rgba(0,0,0,.5);transform:translateX(100%);transition:transform .35s cubic-bezier(.2,.8,.2,1);visibility:hidden}
+.carrito.abierto{transform:none;visibility:visible}
+.carrito-cab{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--linea)}
+.carrito-cab h2{font-size:1.25rem;margin:0}
+.carrito-cerrar{width:40px;height:40px;border-radius:50%;border:1px solid var(--linea);background:none;cursor:pointer;display:grid;place-items:center}
+.carrito-cerrar svg{width:18px;height:18px}
+.carrito-aviso{margin:14px 20px 0;padding:10px 14px;border-radius:10px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);color:#8ff0c8;font-size:.9rem;font-weight:600;display:none}
+.carrito-aviso.visible{display:block}
+.carrito-cuerpo{flex:1;overflow-y:auto;padding:16px 20px}
+.carrito-vacio{text-align:center;color:var(--texto-2);padding:40px 10px}
+.carrito-vacio svg{width:56px;height:56px;margin:0 auto 12px;color:var(--texto-3)}
+.linea{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--linea)}
+.linea .mini{width:64px;height:64px;border-radius:12px;background:radial-gradient(circle at 50% 40%,#3b2a8a,#06071a);border:1px solid var(--linea);display:grid;place-items:center;overflow:hidden}
+.linea .mini svg{width:40px;height:40px}
+.linea .nom{font-weight:600;font-size:.95rem;line-height:1.3}
+.linea .sub{font-size:.8rem;color:var(--texto-3)}
+.linea .der{text-align:right}
+.linea .imp{font-family:var(--f-titulo);font-weight:700}
+.linea .imp-antes{display:block;font-size:.78rem;color:var(--texto-3);text-decoration:line-through}
+.cantidad{display:inline-flex;align-items:center;margin-top:8px;border:1px solid var(--linea);border-radius:999px;overflow:hidden}
+.cantidad button{width:32px;height:32px;border:0;background:none;cursor:pointer;font-size:1.1rem}
+.cantidad button:hover{background:var(--noche-4)}
+.cantidad span{min-width:26px;text-align:center;font-weight:700;font-size:.9rem}
+.quitar{background:none;border:0;color:var(--texto-3);font-size:.78rem;cursor:pointer;text-decoration:underline;margin-top:6px;padding:0}
+.carrito-pie{padding:18px 20px calc(18px + env(safe-area-inset-bottom));border-top:1px solid var(--linea);background:#04051a}
+.carrito-pie .fila{display:flex;justify-content:space-between;font-size:.95rem;color:var(--texto-2);margin-bottom:6px}
+.carrito-pie .fila--total{font-size:1.15rem;color:var(--texto);margin:10px 0 14px}
+.carrito-pie .fila--total strong{font-family:var(--f-titulo);font-size:1.5rem}
+.carrito-pie .nota{font-size:.78rem;color:var(--texto-3);text-align:center;margin:10px 0 0}
+.carrito-pie .error{display:none;font-size:.85rem;color:#fda4af;text-align:center;margin:10px 0 0}
+.carrito-pie .error.visible{display:block}
+body.sin-scroll{overflow:hidden}
+
+/* =====================================================================
+   18. APARICIÓN AL HACER SCROLL
+   ===================================================================== */
+.aparece{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.aparece.visto{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .aparece{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- =====================================================================
+     SECCIÓN 1 · BARRA DE OFERTA + CUENTA ATRÁS
+     ===================================================================== -->
+<div class="barra" role="region" aria-label="Oferta">
+  <span><strong data-cfg="nombreOferta">BLACK FRIDAY</strong>: hasta <strong>-<span data-cfg="descuento">[X]</span>%</strong><span class="texto-largo"> · solo hasta el <span data-cfg="fechaFinTexto">[FECHA FIN]</span></span></span>
+  <span class="reloj-mini" aria-hidden="true"><span data-reloj="d">00</span><span data-reloj="h">00</span><span data-reloj="m">00</span><span data-reloj="s">00</span></span>
+  <span class="aviso-fin">Oferta finalizada</span>
+</div>
+
+<header class="cabecera">
+  <div class="contenedor">
+    <a class="logo" href="#"><span data-cfg="marca">[NOMBRE DE TU MARCA]</span></a>
+    <div class="derecha">
+      <span class="envio">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg>
+        Envío: <span data-cfg="envio">[TIEMPO DE ENVÍO]</span>
+      </span>
+      <button class="btn-carrito" id="btnCarrito" type="button" aria-label="Abrir carrito" aria-controls="carrito" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2"/><circle cx="10" cy="20.5" r="1.3"/><circle cx="17" cy="20.5" r="1.3"/></svg>
+        <span class="contador" id="contadorCarrito">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- =====================================================================
+     SECCIÓN 2 · HERO: el fondo ES la proyección (cielo animado en canvas)
+     ===================================================================== -->
+<section class="hero" id="inicio">
+  <canvas class="cielo" id="cieloHero" aria-hidden="true"></canvas>
+  <div class="contenedor hero-grid">
+    <div>
+      <span class="etiqueta"><span class="punto"></span> El regalo estrella de esta temporada</span>
+      <h1>Apaga la luz.<br><span class="degradado">Enciende el universo.</span></h1>
+      <p class="sub">Galaxias, auroras boreales y cielos de Navidad proyectados en el techo de tu habitación, tu setup o tu coche. Cambia de cielo en un segundo con sus discos intercambiables.</p>
+      <div class="chips"><span>🌌 Discos intercambiables</span><span>👆 Control táctil</span><span>🔌 USB: casa, coche o portátil</span></div>
+
+      <div class="precio-bloque">
+        <span class="precio-antes" data-precio="anterior">[PRECIO ANTERIOR] €</span>
+        <span class="precio-ahora" data-precio="desde">[PRECIO] €</span>
+        <span class="etiqueta-dto">-<span data-cfg="descuento">[X]</span>%</span>
+      </div>
+      <p class="precio-nota">Precio del <span data-cfg="kitBase">kit básico</span> · Ahorras <strong class="degradado" data-precio="ahorro">[AHORRO] €</strong></p>
+
+      <span class="reloj-titulo">La oferta termina en <span class="aviso-fin">· Oferta finalizada</span></span>
+      <div class="reloj">
+        <div class="unidad"><span class="num" data-reloj="d">00</span><span class="lbl">días</span></div>
+        <div class="unidad"><span class="num" data-reloj="h">00</span><span class="lbl">horas</span></div>
+        <div class="unidad"><span class="num" data-reloj="m">00</span><span class="lbl">min</span></div>
+        <div class="unidad"><span class="num" data-reloj="s">00</span><span class="lbl">seg</span></div>
+      </div>
+
+      <div class="hero-cta">
+        <a class="btn btn--ancho" href="#kits" id="ctaHero">Quiero mi cielo
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <div class="confianza">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>Pago seguro</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></svg><span data-cfg="diasGarantia">[DÍAS]</span> días de devolución</span>
+        </div>
+      </div>
+    </div>
+    <!-- Foto del producto (CONFIG.imagenProducto). Vacío = no se muestra. -->
+    <div class="foto-producto" id="fotoProducto"></div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SECCIÓN 3 · PROBLEMA → GIRO
+     ===================================================================== -->
+<section class="seccion seccion--alt" id="problema">
+  <div class="contenedor">
+    <div class="centrado aparece">
+      <span class="antetitulo">Seamos sinceros</span>
+      <h2>Tu habitación merece algo mejor que la luz del móvil o unas simples luces LED</h2>
+      <p class="intro">Terminas el día mirando una pantalla, con la lámpara de siempre y un techo blanco que no dice nada.</p>
+    </div>
+    <div class="problemas">
+      <div class="problema aparece">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+        <div><h3>Scroll hasta las tantas</h3><p>El móvil es lo último que ves antes de dormir, y lo notas al día siguiente.</p></div>
+      </div>
+      <div class="problema aparece">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></div>
+        <div><h3>Niños que no quieren apagar la luz</h3><p>La oscuridad total da miedo y la hora de dormir se convierte en una negociación.</p></div>
+      </div>
+      <div class="problema aparece">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/></svg></div>
+        <div><h3>Un cuarto sin ambiente</h3><p>Ni para una noche de pelis, ni para relajarte, ni para hacer fotos que den ganas de compartir.</p></div>
+      </div>
+    </div>
+    <div class="giro aparece">
+      <span class="antetitulo">Hasta que lo enciendes</span>
+      <h3>Un clic y el techo se convierte en el cielo</h3>
+      <p>El <strong><span data-cfg="marca">[NOMBRE DE TU MARCA]</span> Proyector de Estrellas</strong> llena tu habitación de una luz suave y envolvente. Pones un disco, lo apuntas al techo y listo: el mejor plan para desconectar ya está en tu cuarto.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SECCIÓN 4 · DEMO INTERACTIVA: elige un disco
+     Los cielos son animaciones ilustrativas, no fotos del producto.
+     ===================================================================== -->
+<section class="seccion" id="demo">
+  <div class="contenedor">
+    <div class="centrado aparece">
+      <span class="antetitulo">Pruébalo aquí</span>
+      <h2>Elige un disco y mira tu techo</h2>
+      <p class="intro">Cada disco es un cielo distinto. Toca uno para cambiarlo.</p>
+    </div>
+    <div class="demo aparece">
+      <canvas id="cieloDemo" aria-hidden="true"></canvas>
+      <!-- Silueta de una habitación (cama, mesilla y el proyector) -->
+      <svg class="habitacion" viewBox="0 0 900 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <defs><linearGradient id="suelo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#05061a" stop-opacity="0"/><stop offset=".35" stop-color="#05061a" stop-opacity=".85"/><stop offset="1" stop-color="#020210"/></linearGradient></defs>
+        <rect x="0" y="0" width="900" height="260" fill="url(#suelo)"/>
+        <path d="M150 260V170q0-22 22-22h330q22 0 22 22v90z" fill="#0b0c22"/>
+        <rect x="160" y="190" width="370" height="70" rx="10" fill="#14163a"/>
+        <rect x="180" y="160" width="110" height="42" rx="18" fill="#1d2050"/>
+        <rect x="300" y="160" width="110" height="42" rx="18" fill="#1d2050"/>
+        <rect x="600" y="196" width="92" height="64" rx="6" fill="#0e1030"/>
+        <!-- proyector -->
+        <path d="M640 196 q-4-30 18-44" stroke="#e9ebff" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <rect x="650" y="132" width="34" height="26" rx="12" fill="#f4f5ff" transform="rotate(-28 667 145)"/>
+        <circle cx="678" cy="134" r="5" fill="#a5f3fc"/>
+      </svg>
+      <span class="nombre-disco" id="nombreDisco">Galaxia</span>
+    </div>
+    <div class="discos" id="discos" role="group" aria-label="Discos"></div>
+    <p class="demo-nota">Animación ilustrativa del efecto. El resultado depende del disco, la distancia y la oscuridad de la habitación.</p>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SECCIÓN 5 · BENEFICIOS
+     ===================================================================== -->
+<section class="seccion seccion--alt" id="beneficios">
+  <div class="contenedor">
+    <div class="centrado aparece">
+      <span class="antetitulo">Por qué engancha</span>
+      <h2>Pequeño por fuera. Infinito en tu techo.</h2>
+    </div>
+    <div class="beneficios">
+      <article class="tarjeta aparece" data-tilt>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <h3>Discos intercambiables</h3>
+        <p>Galaxias, auroras, cielos de Navidad y más. Elige el kit de 5, 15 o 20 discos y cambia de cielo cada noche.</p>
+      </article>
+      <article class="tarjeta aparece" data-tilt>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11V5a2 2 0 0 1 4 0v6M13 10a2 2 0 0 1 4 0v3a7 7 0 0 1-7 7h0a6 6 0 0 1-5-3l-2-3.5a1.6 1.6 0 0 1 2.7-1.7L9 14"/></svg></div>
+        <h3>Control táctil</h3>
+        <p>Enciéndelo y regula el brillo con un toque. Sin botones duros ni mandos que se pierden.</p>
+      </article>
+      <article class="tarjeta aparece" data-tilt>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v8M8 6l4-4 4 4M7 14h10v3a5 5 0 0 1-10 0z"/></svg></div>
+        <h3>Funciona por USB</h3>
+        <p>Alimentación USB 5 V y bajo consumo: conéctalo al cargador del móvil, al ordenador, al coche o a una batería externa.</p>
+      </article>
+      <article class="tarjeta aparece" data-tilt>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 21c0-6 4-6 4-11a4 4 0 0 1 8 0"/><circle cx="17" cy="10" r="3"/></svg></div>
+        <h3>Brazo flexible</h3>
+        <p>Dóblalo hacia el techo, la pared o encima de la cama. Tú decides dónde aparece el cielo.</p>
+      </article>
+      <article class="tarjeta aparece" data-tilt>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></div>
+        <h3>Brillo regulable</h3>
+        <p>Elige la intensidad: suave para dormir, más viva para una noche de pelis o para tu setup.</p>
+      </article>
+      <article class="tarjeta aparece" data-tilt>
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg></div>
+        <h3>El regalo que sí se usa</h3>
+        <p>Para niños, parejas, adolescentes o para ti. Un regalo que se enciende cada noche y no acaba en un cajón.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SECCIÓN 6 · PARA QUIÉN ES
+     ===================================================================== -->
+<section class="seccion" id="para-quien">
+  <div class="contenedor">
+    <div class="centrado aparece">
+      <span class="antetitulo">Hecho para</span>
+      <h2>Un proyector, mil planes</h2>
+    </div>
+    <div class="para-quien">
+      <div class="perfil aparece"><div class="emoji">🧸</div><div><h3>La hora de dormir de los peques</h3><p>Un ritual que les encanta: apagar la luz para ver las estrellas, en vez de pelear por dejarla encendida.</p></div></div>
+      <div class="perfil aparece"><div class="emoji">💜</div><div><h3>Noches en pareja</h3><p>Una peli, una cena en casa o simplemente hablar bajo un cielo de auroras.</p></div></div>
+      <div class="perfil aparece"><div class="emoji">🎮</div><div><h3>Gaming y setup</h3><p>Dale a tu cuarto o a tu streaming un ambiente que se ve en cámara.</p></div></div>
+      <div class="perfil aparece"><div class="emoji">🧘</div><div><h3>Relax y desconexión</h3><p>Deja el móvil, pon el cielo y respira. Tu rato de calma antes de dormir.</p></div></div>
+      <div class="perfil aparece"><div class="emoji">🚗</div><div><h3>El techo de tu coche</h3><p>Enchúfalo al USB del coche y convierte el interior en un cielo estrellado. Solo con el coche parado.</p></div></div>
+      <div class="perfil aparece"><div class="emoji">⛺</div><div><h3>Viajes y acampada</h3><p>Compacto y ligero. Con una batería externa, tu cielo va contigo al hotel o a la tienda de campaña.</p></div></div>
+    </div>
+    <!-- Fuentes de alimentación compatibles -->
+    <div class="fuentes aparece">
+      <h3>Funciona con lo que ya tienes</h3>
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>Portátil</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="6" y="3" width="12" height="18" rx="2.5"/><path d="M10 7h4"/></svg>Batería externa</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="6" y="8" width="12" height="12" rx="2"/><path d="M10 8V3M14 8V3"/></svg>Cargador de pared</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 3h6v4l2 3v9a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-9l2-3z"/></svg>Cargador de coche</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="2"/><circle cx="12" cy="15" r="2.5"/><path d="M10 6h4"/></svg>PC de sobremesa</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SECCIÓN 7 · CÓMO SE USA
+     ===================================================================== -->
+<section class="seccion seccion--alt" id="como-se-usa">
+  <div class="contenedor">
+    <div class="centrado aparece">
+      <span class="antetitulo">En 10 segundos</span>
+      <h2>Así de fácil</h2>
+    </div>
+    <div class="pasos">
+      <div class="paso aparece"><span class="numero">1</span>
+        <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M24 4v14M18 10l6-6 6 6M14 26h20v6a10 10 0 0 1-20 0z M24 42v4"/></svg>
+        <h3>Conéctalo por USB</h3><p>A un cargador, al ordenador o a una batería externa.</p></div>
+      <div class="paso aparece"><span class="numero">2</span>
+        <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="24" cy="24" r="16"/><circle cx="24" cy="24" r="5"/><path d="M24 8v4M24 36v4M8 24h4M36 24h4"/></svg>
+        <h3>Elige un disco</h3><p>Colócalo en el proyector. Galaxia, aurora, océano… tú eliges.</p></div>
+      <div class="paso aparece"><span class="numero">3</span>
+        <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 40c0-12 8-12 8-22"/><path d="M18 18l14-10M22 22l16-6M24 28l16 0"/></svg>
+        <h3>Apunta y disfruta</h3><p>Dobla el brazo hacia el techo, toca para encender y ajusta el brillo.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SECCIÓN 7b · FICHA TÉCNICA Y CONTENIDO DE LA CAJA (datos del fabricante)
+     ===================================================================== -->
+<section class="seccion" id="ficha">
+  <div class="contenedor">
+    <div class="centrado aparece">
+      <span class="antetitulo">Sin letra pequeña</span>
+      <h2>Ficha técnica</h2>
+    </div>
+    <div class="ficha">
+      <div class="ficha-bloque aparece">
+        <h3>Características</h3>
+        <dl>
+          <dt>Alimentación</dt><dd>USB 5 V</dd>
+          <dt>Material</dt><dd>Plástico ABS</dd>
+          <dt>Brillo</dt><dd>Regulable</dd>
+          <dt>Control</dt><dd>Táctil</dd>
+          <dt>Discos</dt><dd>5, 15 o 20 según el kit</dd>
+          <dt>Temas</dt><dd>Galaxias, auroras, Navidad y más</dd>
+        </dl>
+      </div>
+      <div class="ficha-bloque aparece">
+        <h3>Qué hay en la caja</h3>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5 9-10"/></svg><span><b>1 proyector</b> de estrellas</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5 9-10"/></svg><span><b>1 cable USB</b></span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5 9-10"/></svg><span><b>5, 15 o 20 discos</b> de proyección, según el kit</span></li>
+        </ul>
+        <p class="intro" style="font-size:.88rem;margin:14px 0 0">No incluye adaptador de enchufe: usa el cargador USB de tu móvil.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SECCIÓN 8 · KITS (5, 15, 20 discos). Precios en CONFIG.kits
+     ===================================================================== -->
+<section class="seccion" id="kits">
+  <div class="contenedor">
+    <div class="centrado aparece">
+      <span class="antetitulo">Oferta por tiempo limitado</span>
+      <h2>Elige tu kit de cielos</h2>
+      <p class="intro">Más discos, más noches distintas. El kit grande es el favorito para regalar.</p>
+    </div>
+    <div class="packs" role="radiogroup" aria-label="Elige tu kit" id="listaKits"></div>
+    <div class="resumen aparece" id="resumen" aria-live="polite">
+      <div class="fila"><span>Kit seleccionado</span><strong id="resKit">—</strong></div>
+      <div class="fila"><span>Precio sin oferta</span><s id="resAntes">—</s></div>
+      <div class="fila"><span>Tu ahorro</span><strong class="ahorro" id="resAhorro">—</strong></div>
+      <div class="fila fila--total"><span>Total</span><strong id="resTotal">—</strong></div>
+      <a class="btn btn--ancho" href="#carrito" data-comprar>Añadir al carrito
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2"/></svg></a>
+      <p class="regalo">🎁 ¿Es para regalar? Llega listo para envolver.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SECCIÓN 9 · GARANTÍA + RESEÑAS
+     ===================================================================== -->
+<section class="seccion seccion--alt" id="garantia">
+  <div class="contenedor">
+    <div class="garantia aparece">
+      <div class="sello"><div><b data-cfg="diasGarantia">[DÍAS]</b><small>días de<br>devolución</small></div></div>
+      <div>
+        <span class="antetitulo">Compra sin riesgo</span>
+        <h2>Si no te enamora, lo devuelves</h2>
+        <p class="intro">Tienes <strong><span data-cfg="diasGarantia">[DÍAS]</span> días</strong> para probarlo en casa. Si no te convence, escríbenos y gestionamos la devolución.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5 9-10"/></svg><span><strong>Pago seguro</strong> y cifrado.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5 9-10"/></svg><span><strong>Envío</strong>: <span data-cfg="envio">[TIEMPO DE ENVÍO]</span>, con número de seguimiento.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5 9-10"/></svg><span><strong>Atención</strong> por email: <span data-cfg="email">[EMAIL DE CONTACTO]</span>.</span></li>
+        </ul>
+        <div class="pagos" aria-label="Métodos de pago"><span>VISA</span><span>MASTERCARD</span><span>PAYPAL</span><span>APPLE PAY</span><span>GOOGLE PAY</span></div>
+      </div>
+    </div>
+    <!-- Sustituye cada [RESEÑA REAL] por una opinión real de un cliente -->
+    <div class="resenas">
+      <figure class="resena aparece"><div class="estrellas">★★★★★</div><p><span class="placeholder">[RESEÑA REAL]</span></p><figcaption class="autor"><span class="placeholder">[NOMBRE DEL CLIENTE]</span></figcaption></figure>
+      <figure class="resena aparece"><div class="estrellas">★★★★★</div><p><span class="placeholder">[RESEÑA REAL]</span></p><figcaption class="autor"><span class="placeholder">[NOMBRE DEL CLIENTE]</span></figcaption></figure>
+      <figure class="resena aparece"><div class="estrellas">★★★★★</div><p><span class="placeholder">[RESEÑA REAL]</span></p><figcaption class="autor"><span class="placeholder">[NOMBRE DEL CLIENTE]</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SECCIÓN 10 · PREGUNTAS FRECUENTES
+     ===================================================================== -->
+<section class="seccion" id="faq">
+  <div class="contenedor">
+    <div class="centrado aparece">
+      <span class="antetitulo">Dudas</span>
+      <h2>Preguntas frecuentes</h2>
+    </div>
+    <div class="faq">
+      <div class="faq-item aparece"><h3><button class="faq-btn" aria-expanded="false">¿Cómo se alimenta? ¿Lleva pilas?<span class="mas"></span></button></h3>
+        <div class="faq-panel"><div><p>Funciona por USB a 5 V, sin pilas. Incluye el cable USB, pero no el adaptador de enchufe: conéctalo al cargador del móvil, al ordenador, al USB del coche o a una batería externa.</p></div></div></div>
+      <div class="faq-item aparece"><h3><button class="faq-btn" aria-expanded="false">¿Qué diferencia hay entre los kits?<span class="mas"></span></button></h3>
+        <div class="faq-panel"><div><p>El proyector es el mismo. Cambia el número de discos que incluye: 5, 15 o 20 cielos distintos.</p></div></div></div>
+      <div class="faq-item aparece"><h3><button class="faq-btn" aria-expanded="false">¿Sirve para el coche?<span class="mas"></span></button></h3>
+        <div class="faq-panel"><div><p>Sí, se conecta a cualquier puerto USB del coche. Úsalo solo con el coche parado, para no distraer al conductor.</p></div></div></div>
+      <div class="faq-item aparece"><h3><button class="faq-btn" aria-expanded="false">¿Qué tamaño tiene la proyección?<span class="mas"></span></button></h3>
+        <div class="faq-panel"><div><p>Depende de la distancia al techo o a la pared: cuanto más lejos, más grande. <span class="placeholder">[TAMAÑO / DISTANCIA RECOMENDADA SEGÚN EL FABRICANTE]</span></p></div></div></div>
+      <div class="faq-item aparece"><h3><button class="faq-btn" aria-expanded="false">¿Se puede dejar encendido toda la noche?<span class="mas"></span></button></h3>
+        <div class="faq-panel"><div><p><span class="placeholder">[CONFIRMA CON EL FABRICANTE SI TIENE TEMPORIZADOR Y SI PUEDE ESTAR ENCENDIDO TODA LA NOCHE]</span></p></div></div></div>
+      <div class="faq-item aparece"><h3><button class="faq-btn" aria-expanded="false">¿Cuánto tarda el envío?<span class="mas"></span></button></h3>
+        <div class="faq-panel"><div><p>El envío tarda <strong data-cfg="envio">[TIEMPO DE ENVÍO]</strong>. Te mandamos el número de seguimiento por email en cuanto sale.</p></div></div></div>
+      <div class="faq-item aparece"><h3><button class="faq-btn" aria-expanded="false">¿Y si no me gusta?<span class="mas"></span></button></h3>
+        <div class="faq-panel"><div><p>Tienes <span data-cfg="diasGarantia">[DÍAS]</span> días de devolución. Escríbenos y te explicamos cómo hacerlo.</p></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SECCIÓN 11 · LLAMADA FINAL
+     ===================================================================== -->
+<section class="final" id="final">
+  <canvas class="cielo" id="cieloFinal" aria-hidden="true"></canvas>
+  <div class="contenedor aparece">
+    <span class="antetitulo">Esta noche puede ser distinta</span>
+    <h2>El universo cabe en tu habitación.<br><span class="degradado">Solo falta encenderlo.</span></h2>
+    <div class="precio-bloque">
+      <span class="precio-antes" data-precio="anterior">[PRECIO ANTERIOR] €</span>
+      <span class="precio-ahora" data-precio="desde">[PRECIO] €</span>
+      <span class="etiqueta-dto">-<span data-cfg="descuento">[X]</span>%</span>
+    </div>
+    <p class="reloj-titulo" style="margin-top:14px">La oferta termina en <span class="aviso-fin">· Oferta finalizada</span></p>
+    <div class="reloj">
+      <div class="unidad"><span class="num" data-reloj="d">00</span><span class="lbl">días</span></div>
+      <div class="unidad"><span class="num" data-reloj="h">00</span><span class="lbl">horas</span></div>
+      <div class="unidad"><span class="num" data-reloj="m">00</span><span class="lbl">min</span></div>
+      <div class="unidad"><span class="num" data-reloj="s">00</span><span class="lbl">seg</span></div>
+    </div>
+    <a class="btn" href="#kits">Quiero mi cielo
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+</section>
+
+</main>
+
+<footer class="pie">
+  <div class="contenedor">
+    <nav><a href="[URL AVISO LEGAL]">Aviso legal</a><a href="[URL PRIVACIDAD]">Privacidad</a><a href="[URL ENVÍOS Y DEVOLUCIONES]">Envíos y devoluciones</a><a href="mailto:[EMAIL DE CONTACTO]">Contacto</a></nav>
+    <p>© <span id="anio">2026</span> <span data-cfg="marca">[NOMBRE DE TU MARCA]</span>. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<!-- Botón fijo en móvil -->
+<div class="cta-fija" id="ctaFija">
+  <div class="mini-precio"><s data-precio="anterior">[PRECIO ANTERIOR] €</s><b data-precio="desde">[PRECIO] €</b></div>
+  <a class="btn" href="#carrito" data-comprar>Añadir al carrito</a>
+</div>
+
+<!-- =====================================================================
+     CARRITO (panel lateral)
+     ===================================================================== -->
+<div class="velo" id="veloCarrito"></div>
+<aside class="carrito" id="carrito" role="dialog" aria-modal="true" aria-labelledby="tituloCarrito">
+  <div class="carrito-cab">
+    <h2 id="tituloCarrito">Tu carrito</h2>
+    <button class="carrito-cerrar" id="cerrarCarrito" type="button" aria-label="Cerrar carrito"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div class="carrito-aviso" id="avisoCarrito" role="status">✓ Añadido al carrito</div>
+  <div class="carrito-cuerpo" id="lineasCarrito"></div>
+  <div class="carrito-pie" id="pieCarrito">
+    <div class="fila"><span>Precio sin oferta</span><s id="carAntes">—</s></div>
+    <div class="fila"><span>Ahorro</span><span class="ahorro" id="carAhorro">—</span></div>
+    <div class="fila fila--total"><span>Total</span><strong id="carTotal">—</strong></div>
+    <button class="btn btn--ancho" type="button" id="finalizarCompra">Finalizar compra
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></button>
+    <button class="btn btn--ancho btn--secundario" type="button" id="seguirComprando">Seguir viendo</button>
+    <p class="error" id="errorCarrito">Falta conectar la tienda: rellena <b>varianteId</b> de cada kit (o <b>urlProducto</b>) en CONFIG.</p>
+    <p class="nota">Pago seguro · <span data-cfg="diasGarantia">[DÍAS]</span> días de devolución · Envío: <span data-cfg="envio">[TIEMPO DE ENVÍO]</span></p>
+  </div>
+</aside>
+
+<script>
+/* =====================================================================
+   CONFIG · CAMBIA AQUÍ TUS DATOS
+   Precios reales: tachado = precio anterior, precio = con el 60 % de descuento.
+   ===================================================================== */
+var CONFIG = {
+  marca: '[NOMBRE DE TU MARCA]',
+  nombreOferta: 'BLACK FRIDAY',
+  finOferta: '2026-11-27T23:59:59+01:00',   // fin de la oferta (fecha y hora)
+  fechaFinTexto: '',                         // vacío = se escribe sola
+  envio: '[TIEMPO DE ENVÍO]',
+  diasGarantia: '[DÍAS]',
+  email: '[EMAIL DE CONTACTO]',
+  imagenProducto: '',                        // URL de una foto del proyector (opcional)
+
+  // Kits: cada uno es una variante de tu producto en Shopify.
+  kits: [
+    { id: 'k5',  nombre: 'Proyector + 5 discos',  discos: 5,  detalle: 'Para empezar',                  precio: 32.38, precioAnterior: 80.95,  varianteId: '57453766803796', insignia: '' },
+    { id: 'k15', nombre: 'Proyector + 15 discos', discos: 15, detalle: 'El más elegido',                precio: 40.00, precioAnterior: 100.00, varianteId: '57453766836564', insignia: 'Más vendido', top: true },
+    { id: 'k20', nombre: 'Proyector + 20 discos', discos: 20, detalle: 'Un cielo distinto cada noche',  precio: 51.18, precioAnterior: 127.95, varianteId: '57453766869332', insignia: 'Mejor precio por disco' }
+  ],
+  kitInicial: 'k15',
+
+  // Pago en Shopify: con varianteId en los kits, "Finalizar compra" lleva al pago.
+  tienda: 'https://vnre7x-8u.myshopify.com', // p. ej. 'https://mitienda.myshopify.com' (no hace falta dentro de Shopify)
+  urlProducto: '[URL DE TU PRODUCTO EN SHOPIFY]',
+  codigoDescuento: ''
+};
+
+(function(){
+  'use strict';
+  var $  = function(s,c){return (c||document).querySelector(s)};
+  var $$ = function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
+  var euros = function(n){ return n.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' €' };
+  var redondear = function(n){ return Math.round(n*100)/100 };
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var kitPorId = function(id){ return CONFIG.kits.filter(function(k){return k.id===id})[0] };
+
+  /* ---------- Textos desde CONFIG ---------- */
+  var fin = new Date(CONFIG.finOferta);
+  if (!CONFIG.fechaFinTexto && !isNaN(fin)) CONFIG.fechaFinTexto = fin.toLocaleDateString('es-ES',{day:'numeric',month:'long'});
+  var base = CONFIG.kits[0];
+  CONFIG.descuento = Math.max.apply(null, CONFIG.kits.map(function(k){ return Math.round((1 - k.precio/k.precioAnterior)*100) }));
+  CONFIG.kitBase = base.nombre.toLowerCase();
+  $$('[data-cfg]').forEach(function(el){ var v = CONFIG[el.getAttribute('data-cfg')]; if (v !== undefined && v !== '') el.textContent = v });
+  var precios = { anterior: base.precioAnterior, desde: base.precio, ahorro: base.precioAnterior - base.precio };
+  $$('[data-precio]').forEach(function(el){ var v = precios[el.getAttribute('data-precio')]; if (typeof v === 'number') el.textContent = euros(redondear(v)) });
+  $('#anio').textContent = new Date().getFullYear();
+  if (CONFIG.imagenProducto) {
+    var img = new Image(); img.src = CONFIG.imagenProducto; img.alt = 'Proyector de estrellas'; img.loading = 'eager';
+    $('#fotoProducto').appendChild(img);
+  }
+
+  /* =====================================================================
+     CUENTA ATRÁS
+     ===================================================================== */
+  var nodos = {d:$$('[data-reloj="d"]'),h:$$('[data-reloj="h"]'),m:$$('[data-reloj="m"]'),s:$$('[data-reloj="s"]')};
+  var dos = function(n){return (n<10?'0':'')+n};
+  var timer;
+  function tic(){
+    var r = fin - Date.now();
+    if (isNaN(r) || r <= 0){ document.body.classList.add('oferta-fin'); clearInterval(timer); return; }
+    var s = Math.floor(r/1000), v = {d:Math.floor(s/86400),h:Math.floor(s%86400/3600),m:Math.floor(s%3600/60),s:s%60};
+    for (var k in v) nodos[k].forEach(function(el){ el.textContent = dos(v[k]) });
+    var mini = $$('.reloj-mini span');
+    mini[0].textContent=v.d+'d'; mini[1].textContent=dos(v.h)+'h'; mini[2].textContent=dos(v.m)+'m'; mini[3].textContent=dos(v.s)+'s';
+  }
+  tic(); timer = setInterval(tic, 1000);
+
+  /* =====================================================================
+     CIELO ANIMADO (canvas 2D). Temas = discos del proyector.
+     ===================================================================== */
+  var TEMAS = {
+    galaxia:  { nombre:'Galaxia',        nebulosas:['#7c3aed','#2563eb','#db2777','#0ea5e9'], fondo:['#0a0630','#02010d'], estrellas:1 },
+    aurora:   { nombre:'Aurora boreal',  nebulosas:['#10b981','#22d3ee','#6366f1'],           fondo:['#03122a','#010510'], estrellas:.8, aurora:true },
+    oceano:   { nombre:'Fondo del mar',  nebulosas:['#0891b2','#2563eb','#14b8a6'],           fondo:['#021a33','#000814'], estrellas:.35, olas:true },
+    luna:     { nombre:'Luna y estrellas', nebulosas:['#4338ca','#1e3a8a'],                   fondo:['#070a24','#01020a'], estrellas:1.3, luna:true },
+    nebulosa: { nombre:'Nebulosa rosa',  nebulosas:['#f472b6','#a855f7','#fb7185','#8b5cf6'], fondo:['#1a0526','#05010c'], estrellas:.9 },
+    navidad:  { nombre:'Navidad',        nebulosas:['#dc2626','#16a34a','#f59e0b','#b91c1c'], fondo:['#14060a','#030104'], estrellas:.7, nieve:true }
+  };
+
+  function Cielo(canvas, tema){
+    var ctx = canvas.getContext('2d');
+    var w=0, h=0, dpr=Math.min(window.devicePixelRatio||1, 2);
+    var estrellas=[], blobs=[], fugaces=[], copos=[], t=0, visible=true, actual=TEMAS[tema], mezcla=1, anterior=null;
+    function medir(){
+      var r = canvas.getBoundingClientRect(); w = r.width; h = r.height;
+      canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
+      sembrar();
+    }
+    function sembrar(){
+      var n = Math.round(w*h/2600 * actual.estrellas);
+      estrellas = [];
+      for (var i=0;i<n;i++) estrellas.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()<.92?Math.random()*1.1+.2:Math.random()*1.8+1,f:Math.random()*6.28,v:.5+Math.random()*2});
+      copos = []; for (var j=0;j<Math.round(w*h/9000);j++) copos.push({x:Math.random()*w,y:Math.random()*h,r:1+Math.random()*2.2,v:.4+Math.random()*.9,f:Math.random()*6.28});
+      blobs = actual.nebulosas.map(function(c,i){ return {c:c,x:Math.random(),y:Math.random()*.8,r:.35+Math.random()*.35,vx:(Math.random()-.5)*.012,vy:(Math.random()-.5)*.008,f:i*1.7} });
+    }
+    function rgba(hex,a){ var n=parseInt(hex.slice(1),16); return 'rgba('+(n>>16)+','+(n>>8&255)+','+(n&255)+','+a+')' }
+    function dibujar(dt){
+      t += dt;
+      var g = ctx.createLinearGradient(0,0,0,h); g.addColorStop(0,actual.fondo[0]); g.addColorStop(1,actual.fondo[1]);
+      ctx.globalCompositeOperation='source-over'; ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+      // Nebulosas
+      ctx.globalCompositeOperation='lighter';
+      var m = Math.max(w,h);
+      blobs.forEach(function(b){
+        var x = (b.x + Math.sin(t*b.vx*8+b.f)*.08)*w, y = (b.y + Math.cos(t*b.vy*8+b.f)*.06)*h, r = b.r*m*(1+Math.sin(t*.3+b.f)*.06);
+        var rg = ctx.createRadialGradient(x,y,0,x,y,r); rg.addColorStop(0,rgba(b.c,.42*mezcla)); rg.addColorStop(.5,rgba(b.c,.12*mezcla)); rg.addColorStop(1,rgba(b.c,0));
+        ctx.fillStyle=rg; ctx.fillRect(0,0,w,h);
+      });
+      // Aurora
+      if (actual.aurora){
+        for (var k=0;k<3;k++){
+          ctx.beginPath();
+          var base = h*(.28+k*.1);
+          for (var x=0;x<=w;x+=12){ var y = base + Math.sin(x*.006 + t*.5 + k)*h*.07 + Math.sin(x*.013 - t*.3)*h*.03; x===0?ctx.moveTo(x,y):ctx.lineTo(x,y) }
+          ctx.lineTo(w,0); ctx.lineTo(0,0); ctx.closePath();
+          var ag = ctx.createLinearGradient(0,base-h*.25,0,base+h*.05);
+          ag.addColorStop(0,'rgba(0,0,0,0)'); ag.addColorStop(.7,rgba(k===1?'#22d3ee':'#34d399',.18*mezcla)); ag.addColorStop(1,'rgba(0,0,0,0)');
+          ctx.fillStyle=ag; ctx.fill();
+        }
+      }
+      // Olas de luz (océano)
+      if (actual.olas){
+        ctx.lineWidth = 2;
+        for (var o=0;o<14;o++){
+          ctx.beginPath();
+          var oy = (o/14)*h + Math.sin(t*.4+o)*12;
+          for (var ox=0;ox<=w;ox+=10){ var yy = oy + Math.sin(ox*.02 + t*1.1 + o*1.3)*8 + Math.sin(ox*.007 - t*.6)*14; ox===0?ctx.moveTo(ox,yy):ctx.lineTo(ox,yy) }
+          ctx.strokeStyle = rgba('#67e8f9', .05 + .05*Math.sin(t+o)); ctx.stroke();
+        }
+      }
+      // Luna
+      if (actual.luna){
+        var lx=w*.76, ly=h*.24, lr=Math.min(w,h)*.11;
+        var halo = ctx.createRadialGradient(lx,ly,lr*.8,lx,ly,lr*4); halo.addColorStop(0,'rgba(220,225,255,.25)'); halo.addColorStop(1,'rgba(220,225,255,0)');
+        ctx.fillStyle=halo; ctx.fillRect(0,0,w,h);
+        ctx.globalCompositeOperation='source-over';
+        var lg = ctx.createRadialGradient(lx-lr*.3,ly-lr*.3,lr*.1,lx,ly,lr); lg.addColorStop(0,'#fbfbff'); lg.addColorStop(1,'#c7cbe8');
+        ctx.fillStyle=lg; ctx.beginPath(); ctx.arc(lx,ly,lr,0,6.283); ctx.fill();
+        ctx.fillStyle='rgba(150,155,190,.35)';
+        [[-.3,-.1,.18],[.25,.2,.12],[.05,.4,.09],[.35,-.35,.08]].forEach(function(c){ ctx.beginPath(); ctx.arc(lx+c[0]*lr,ly+c[1]*lr,c[2]*lr,0,6.283); ctx.fill() });
+        ctx.globalCompositeOperation='lighter';
+      }
+      // Nieve (tema Navidad)
+      if (actual.nieve){
+        ctx.fillStyle='rgba(255,255,255,.75)';
+        for (var c2=0;c2<copos.length;c2++){
+          var cp = copos[c2]; cp.y += cp.v*dt*40; cp.x += Math.sin(t+cp.f)*dt*12;
+          if (cp.y > h) { cp.y = -5; cp.x = Math.random()*w; }
+          ctx.beginPath(); ctx.arc(cp.x,cp.y,cp.r,0,6.283); ctx.fill();
+        }
+      }
+      // Estrellas que titilan
+      for (var i=0;i<estrellas.length;i++){
+        var s = estrellas[i], a = .45 + .55*Math.sin(t*s.v + s.f);
+        ctx.fillStyle = 'rgba(255,255,255,'+(a*.9).toFixed(3)+')';
+        ctx.beginPath(); ctx.arc(s.x + Math.sin(t*.05)*4, s.y, s.r, 0, 6.283); ctx.fill();
+        if (s.r > 1.4){ ctx.fillStyle='rgba(200,220,255,'+(a*.18).toFixed(3)+')'; ctx.beginPath(); ctx.arc(s.x+Math.sin(t*.05)*4,s.y,s.r*4,0,6.283); ctx.fill() }
+      }
+      // Estrellas fugaces
+      if (!reduceMotion && Math.random() < dt*.25) fugaces.push({x:Math.random()*w*.8, y:Math.random()*h*.4, vx:380+Math.random()*200, vy:140+Math.random()*80, vida:0});
+      fugaces = fugaces.filter(function(f){
+        f.vida += dt; f.x += f.vx*dt; f.y += f.vy*dt;
+        var lg2 = ctx.createLinearGradient(f.x,f.y,f.x-f.vx*.18,f.y-f.vy*.18);
+        lg2.addColorStop(0,'rgba(255,255,255,'+Math.max(0,.9-f.vida)+')'); lg2.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.strokeStyle=lg2; ctx.lineWidth=1.6; ctx.beginPath(); ctx.moveTo(f.x,f.y); ctx.lineTo(f.x-f.vx*.18,f.y-f.vy*.18); ctx.stroke();
+        return f.vida < 1;
+      });
+      if (mezcla < 1) mezcla = Math.min(1, mezcla + dt*1.5);
+    }
+    var ultimo = performance.now();
+    function bucle(ahora){
+      requestAnimationFrame(bucle);
+      var dt = Math.min((ahora-ultimo)/1000, .05); ultimo = ahora;
+      if (!visible || document.hidden) return;
+      dibujar(reduceMotion ? 0 : dt);
+    }
+    medir();
+    if ('ResizeObserver' in window) new ResizeObserver(medir).observe(canvas); else addEventListener('resize', medir);
+    if ('IntersectionObserver' in window) new IntersectionObserver(function(e){ visible = e[0].isIntersecting }).observe(canvas);
+    dibujar(0);
+    requestAnimationFrame(bucle);
+    return { tema:function(nombre){ actual = TEMAS[nombre]; mezcla = 0; sembrar(); } };
+  }
+
+  var cieloHero = Cielo($('#cieloHero'), 'galaxia');
+  var cieloDemo = Cielo($('#cieloDemo'), 'galaxia');
+  Cielo($('#cieloFinal'), 'aurora');
+
+  /* Botones de discos de la demo */
+  var discos = $('#discos');
+  var muestras = {galaxia:'radial-gradient(circle at 35% 35%,#db2777,#7c3aed 45%,#0a0630)',aurora:'linear-gradient(160deg,#34d399,#22d3ee 50%,#03122a)',oceano:'radial-gradient(circle at 50% 30%,#22d3ee,#0369a1 55%,#021a33)',luna:'radial-gradient(circle at 60% 40%,#f5f5ff 0 22%,#1e1b4b 24%)',nebulosa:'radial-gradient(circle at 40% 40%,#f472b6,#a855f7 50%,#1a0526)',navidad:'radial-gradient(circle at 40% 40%,#f59e0b,#dc2626 45%,#14532d)'};
+  Object.keys(TEMAS).forEach(function(k, i){
+    var b = document.createElement('button'); b.type='button'; b.className='disco'; b.setAttribute('aria-pressed', i===0);
+    b.innerHTML = '<span class="muestra" style="background:'+muestras[k]+'"></span>'+TEMAS[k].nombre;
+    b.addEventListener('click', function(){
+      $$('.disco', discos).forEach(function(x){ x.setAttribute('aria-pressed','false') });
+      b.setAttribute('aria-pressed','true'); cieloDemo.tema(k); $('#nombreDisco').textContent = TEMAS[k].nombre;
+    });
+    discos.appendChild(b);
+  });
+  // El hero cambia de cielo solo cada pocos segundos
+  if (!reduceMotion){
+    var ciclo = ['galaxia','navidad','aurora','nebulosa','luna'], ic = 0;
+    setInterval(function(){ ic = (ic+1)%ciclo.length; cieloHero.tema(ciclo[ic]) }, 7000);
+  }
+
+  /* =====================================================================
+     SELECTOR DE KITS
+     ===================================================================== */
+  var lista = $('#listaKits');
+  var seleccion = kitPorId(CONFIG.kitInicial) || CONFIG.kits[0];
+  CONFIG.kits.forEach(function(k){
+    var b = document.createElement('button'); b.type='button'; b.className='pack aparece'; b.setAttribute('role','radio'); b.dataset.id = k.id;
+    var porDisco = k.precio / k.discos;
+    b.innerHTML = (k.insignia ? '<span class="insignia'+(k.top?' insignia--top':'')+'">'+k.insignia+'</span>' : '') +
+      '<span class="radio" aria-hidden="true"></span>' +
+      '<span class="info"><span class="nombre">'+k.nombre+'</span><span class="detalle">'+k.detalle+(isFinite(porDisco)?' · '+euros(redondear(porDisco))+'/disco':'')+'</span></span>' +
+      '<span class="precios"><span class="p-ahora">'+euros(k.precio)+'</span><span class="p-antes">'+euros(k.precioAnterior)+'</span></span>';
+    b.addEventListener('click', function(){ elegir(k) });
+    lista.appendChild(b);
+  });
+  lista.addEventListener('keydown', function(e){
+    var i = CONFIG.kits.indexOf(seleccion);
+    if (e.key==='ArrowRight'||e.key==='ArrowDown') i=(i+1)%CONFIG.kits.length;
+    else if (e.key==='ArrowLeft'||e.key==='ArrowUp') i=(i-1+CONFIG.kits.length)%CONFIG.kits.length;
+    else return;
+    e.preventDefault(); elegir(CONFIG.kits[i]); $$('.pack',lista)[i].focus();
+  });
+  function elegir(k){
+    seleccion = k;
+    $$('.pack',lista).forEach(function(b){ var on = b.dataset.id===k.id; b.setAttribute('aria-checked',on); b.tabIndex = on?0:-1 });
+    $('#resKit').textContent = k.nombre;
+    $('#resAntes').textContent = euros(k.precioAnterior);
+    $('#resAhorro').textContent = '-' + euros(redondear(k.precioAnterior-k.precio));
+    $('#resTotal').textContent = euros(k.precio);
+  }
+  elegir(seleccion);
+
+  /* =====================================================================
+     CARRITO
+     ===================================================================== */
+  var CLAVE = 'carritoProyector', carrito = [];
+  try { carrito = JSON.parse(localStorage.getItem(CLAVE)) || [] } catch(e){ carrito = [] }
+  carrito = carrito.filter(function(l){ return kitPorId(l.id) && l.cantidad > 0 });
+  function guardar(){ try { localStorage.setItem(CLAVE, JSON.stringify(carrito)) } catch(e){} }
+  function unidades(){ return carrito.reduce(function(s,l){ return s+l.cantidad },0) }
+  var panel = $('#carrito'), velo = $('#veloCarrito'), btnCarrito = $('#btnCarrito');
+  var miniIcono = '<svg viewBox="0 0 48 48"><circle cx="10" cy="12" r="1.2" fill="#fff"/><circle cx="36" cy="8" r="1" fill="#fff"/><circle cx="40" cy="20" r="1.4" fill="#a5f3fc"/><path d="M14 44c0-10 6-10 6-18" stroke="#e9ebff" stroke-width="2.6" fill="none" stroke-linecap="round"/><rect x="16" y="14" width="18" height="14" rx="6" fill="#f4f5ff" transform="rotate(-25 25 21)"/><circle cx="30" cy="16" r="2.6" fill="#22d3ee"/></svg>';
+
+  function pintar(){
+    var n = unidades(), c = $('#contadorCarrito');
+    c.textContent = n; c.classList.toggle('lleno', n>0);
+    btnCarrito.setAttribute('aria-label','Abrir carrito ('+n+(n===1?' producto':' productos')+')');
+    var cuerpo = $('#lineasCarrito');
+    if (!carrito.length){
+      cuerpo.innerHTML = '<div class="carrito-vacio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2"/><circle cx="10" cy="20.5" r="1.3"/><circle cx="17" cy="20.5" r="1.3"/></svg><p>Tu carrito está vacío.</p><a class="btn" href="#kits" data-cerrar>Ver kits</a></div>';
+      $('#pieCarrito').style.display='none'; return;
+    }
+    $('#pieCarrito').style.display='';
+    var total=0, antes=0;
+    cuerpo.innerHTML = carrito.map(function(l,i){
+      var k = kitPorId(l.id); total += k.precio*l.cantidad; antes += k.precioAnterior*l.cantidad;
+      return '<div class="linea"><div class="mini" aria-hidden="true">'+miniIcono+'</div>' +
+        '<div><div class="nom">'+CONFIG.marca+' Proyector de Estrellas</div><div class="sub">'+k.nombre+'</div>' +
+        '<div class="cantidad" role="group" aria-label="Cantidad"><button type="button" data-menos="'+i+'" aria-label="Quitar uno">−</button><span>'+l.cantidad+'</span><button type="button" data-mas="'+i+'" aria-label="Añadir uno">+</button></div></div>' +
+        '<div class="der"><span class="imp">'+euros(redondear(k.precio*l.cantidad))+'</span><span class="imp-antes">'+euros(redondear(k.precioAnterior*l.cantidad))+'</span><button type="button" class="quitar" data-quitar="'+i+'">Eliminar</button></div></div>';
+    }).join('');
+    $('#carAntes').textContent = euros(redondear(antes));
+    $('#carAhorro').textContent = '-' + euros(redondear(antes-total));
+    $('#carTotal').textContent = euros(redondear(total));
+  }
+  function abrir(){ panel.classList.add('abierto'); velo.classList.add('abierto'); document.body.classList.add('sin-scroll'); btnCarrito.setAttribute('aria-expanded','true'); setTimeout(function(){ $('#cerrarCarrito').focus() },50) }
+  function cerrar(){ panel.classList.remove('abierto'); velo.classList.remove('abierto'); document.body.classList.remove('sin-scroll'); btnCarrito.setAttribute('aria-expanded','false'); $('#avisoCarrito').classList.remove('visible'); $('#errorCarrito').classList.remove('visible') }
+  function anadir(k){
+    var l = carrito.filter(function(x){ return x.id===k.id })[0];
+    if (l) l.cantidad++; else carrito.push({id:k.id, cantidad:1});
+    guardar(); pintar(); $('#avisoCarrito').classList.add('visible');
+    btnCarrito.classList.remove('salto'); void btnCarrito.offsetWidth; btnCarrito.classList.add('salto');
+    abrir();
+  }
+  $$('[data-comprar]').forEach(function(a){ a.addEventListener('click', function(e){ e.preventDefault(); anadir(seleccion) }) });
+  btnCarrito.addEventListener('click', abrir);
+  $('#cerrarCarrito').addEventListener('click', cerrar);
+  $('#seguirComprando').addEventListener('click', cerrar);
+  velo.addEventListener('click', cerrar);
+  document.addEventListener('keydown', function(e){ if (e.key==='Escape' && panel.classList.contains('abierto')) cerrar() });
+  $('#lineasCarrito').addEventListener('click', function(e){
+    var t = e.target.closest('button,[data-cerrar]'); if (!t) return;
+    if (t.hasAttribute('data-cerrar')) { cerrar(); return; }
+    var i;
+    if ((i=t.getAttribute('data-mas'))!==null) carrito[i].cantidad++;
+    else if ((i=t.getAttribute('data-menos'))!==null){ if (--carrito[i].cantidad<1) carrito.splice(i,1) }
+    else if ((i=t.getAttribute('data-quitar'))!==null) carrito.splice(i,1);
+    else return;
+    $('#avisoCarrito').classList.remove('visible'); guardar(); pintar();
+  });
+  /* Finalizar compra → pago de Shopify (enlace de carrito con varias variantes) */
+  $('#finalizarCompra').addEventListener('click', function(){
+    if (!carrito.length) return;
+    var enShopify = !!(window.Shopify && window.Shopify.shop);
+    var dominio = (CONFIG.tienda||'').replace(/\/$/,'');
+    var todas = carrito.every(function(l){ return kitPorId(l.id).varianteId });
+    var dto = CONFIG.codigoDescuento ? '?discount='+encodeURIComponent(CONFIG.codigoDescuento) : '';
+    if (todas && (dominio || enShopify)) {
+      window.location.href = dominio + '/cart/' + carrito.map(function(l){ return kitPorId(l.id).varianteId+':'+l.cantidad }).join(',') + dto;
+    } else if (CONFIG.urlProducto && CONFIG.urlProducto.indexOf('[')<0) {
+      window.location.href = CONFIG.urlProducto;
+    } else { $('#errorCarrito').classList.add('visible') }
+  });
+  pintar();
+
+  /* =====================================================================
+     BOTÓN FIJO EN MÓVIL (se oculta cuando ya se ve otro botón de compra)
+     ===================================================================== */
+  var ctaFija = $('#ctaFija');
+  if ('IntersectionObserver' in window){
+    var vis = new Set();
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ e.isIntersecting?vis.add(e.target):vis.delete(e.target) }); ctaFija.classList.toggle('visible', vis.size===0) });
+    io.observe($('#ctaHero')); io.observe($('#resumen'));
+  } else ctaFija.classList.add('visible');
+
+  /* =====================================================================
+     APARICIÓN AL HACER SCROLL
+     ===================================================================== */
+  if ('IntersectionObserver' in window && !reduceMotion){
+    var ioA = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('visto'); ioA.unobserve(e.target) } }) },{rootMargin:'0px 0px -8% 0px',threshold:.08});
+    $$('.aparece').forEach(function(el){
+      var hermanos = Array.prototype.filter.call(el.parentNode.children, function(h){ return h.classList.contains('aparece') });
+      el.style.transitionDelay = (Math.min(hermanos.indexOf(el),5)*90)+'ms'; ioA.observe(el);
+    });
+  } else $$('.aparece').forEach(function(el){ el.classList.add('visto') });
+
+  /* =====================================================================
+     ACORDEÓN
+     ===================================================================== */
+  $$('.faq-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var item = btn.closest('.faq-item'), abrirlo = !item.classList.contains('abierto');
+      $$('.faq-item.abierto').forEach(function(o){ o.classList.remove('abierto'); $('.faq-btn',o).setAttribute('aria-expanded','false') });
+      if (abrirlo){ item.classList.add('abierto'); btn.setAttribute('aria-expanded','true') }
+    });
+  });
+
+  /* =====================================================================
+     TARJETAS CON TILT 3D
+     ===================================================================== */
+  if (!reduceMotion){
+    $$('[data-tilt]').forEach(function(t){
+      t.addEventListener('pointermove', function(e){
+        if (e.pointerType!=='mouse') return;
+        var r = t.getBoundingClientRect(), x=(e.clientX-r.left)/r.width*2-1, y=(e.clientY-r.top)/r.height*2-1;
+        t.style.setProperty('--ry',(x*9).toFixed(2)+'deg'); t.style.setProperty('--rx',(-y*9).toFixed(2)+'deg');
+        t.style.setProperty('--mx',((x+1)*50)+'%'); t.style.setProperty('--my',((y+1)*50)+'%');
+      });
+      t.addEventListener('pointerleave', function(){ t.style.setProperty('--rx','0deg'); t.style.setProperty('--ry','0deg') });
+    });
+  }
+})();
+</script>
+</body>
+</html>
+{% endraw %}
