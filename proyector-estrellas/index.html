@@ -243,6 +243,23 @@ p{margin:0 0 1em}
 .perfil h3{margin-bottom:4px}
 .perfil p{margin:0;color:var(--texto-2);font-size:.95rem}
 @media (min-width:760px){.para-quien{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1000px){.para-quien{grid-template-columns:repeat(3,1fr)}}
+.fuentes{margin-top:30px;padding:22px;border-radius:var(--radio);background:var(--noche-2);border:1px solid var(--linea);text-align:center}
+.fuentes h3{font-size:1rem;margin-bottom:14px;color:var(--violeta-claro)}
+.fuentes ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:12px}
+.fuentes li{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:.85rem;color:var(--texto-2)}
+.fuentes li svg{width:34px;height:34px;color:var(--cian)}
+.ficha{display:grid;gap:18px;margin-top:34px}
+.ficha-bloque{padding:24px;border-radius:var(--radio);background:var(--noche-2);border:1px solid var(--linea)}
+.ficha-bloque h3{margin-bottom:12px}
+.ficha dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:10px 18px;font-size:.95rem}
+.ficha dt{color:var(--texto-3)}
+.ficha dd{margin:0;font-weight:600}
+.ficha ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.ficha li{display:flex;gap:10px;align-items:center;color:var(--texto-2)}
+.ficha li b{color:var(--texto)}
+.ficha li svg{width:20px;height:20px;color:var(--verde);flex:none}
+@media (min-width:760px){.ficha{grid-template-columns:1fr 1fr}}
 
 /* =====================================================================
    11. SECCIÓN 7 · CÓMO SE USA
@@ -428,8 +445,8 @@ body.sin-scroll{overflow:hidden}
     <div>
       <span class="etiqueta"><span class="punto"></span> El regalo estrella de esta temporada</span>
       <h1>Apaga la luz.<br><span class="degradado">Enciende el universo.</span></h1>
-      <p class="sub">Galaxias, auroras boreales y el fondo del océano proyectados en el techo de tu habitación. Cambia de cielo en un segundo con sus discos intercambiables.</p>
-      <div class="chips"><span>🌌 Discos intercambiables</span><span>👆 Control táctil</span><span>🔌 USB: va con cualquier cargador</span></div>
+      <p class="sub">Galaxias, auroras boreales y cielos de Navidad proyectados en el techo de tu habitación, tu setup o tu coche. Cambia de cielo en un segundo con sus discos intercambiables.</p>
+      <div class="chips"><span>🌌 Discos intercambiables</span><span>👆 Control táctil</span><span>🔌 USB: casa, coche o portátil</span></div>
 
       <div class="precio-bloque">
         <span class="precio-antes" data-precio="anterior">[PRECIO ANTERIOR] €</span>
@@ -539,7 +556,7 @@ body.sin-scroll{overflow:hidden}
       <article class="tarjeta aparece" data-tilt>
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></div>
         <h3>Discos intercambiables</h3>
-        <p>Galaxias, nebulosas, planetas, auroras y más. Elige el kit de 5, 15 o 20 discos y cambia de cielo cada noche.</p>
+        <p>Galaxias, auroras, cielos de Navidad y más. Elige el kit de 5, 15 o 20 discos y cambia de cielo cada noche.</p>
       </article>
       <article class="tarjeta aparece" data-tilt>
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11V5a2 2 0 0 1 4 0v6M13 10a2 2 0 0 1 4 0v3a7 7 0 0 1-7 7h0a6 6 0 0 1-5-3l-2-3.5a1.6 1.6 0 0 1 2.7-1.7L9 14"/></svg></div>
@@ -549,7 +566,7 @@ body.sin-scroll{overflow:hidden}
       <article class="tarjeta aparece" data-tilt>
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v8M8 6l4-4 4 4M7 14h10v3a5 5 0 0 1-10 0z"/></svg></div>
         <h3>Funciona por USB</h3>
-        <p>Alimentación USB 5 V: conéctalo al cargador del móvil, al ordenador o a una batería externa.</p>
+        <p>Alimentación USB 5 V y bajo consumo: conéctalo al cargador del móvil, al ordenador, al coche o a una batería externa.</p>
       </article>
       <article class="tarjeta aparece" data-tilt>
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 21c0-6 4-6 4-11a4 4 0 0 1 8 0"/><circle cx="17" cy="10" r="3"/></svg></div>
@@ -558,8 +575,8 @@ body.sin-scroll{overflow:hidden}
       </article>
       <article class="tarjeta aparece" data-tilt>
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></div>
-        <h3>Luz suave y cálida</h3>
-        <p>Una luz tenue y relajante, como la de la luna. Perfecta para dormir, leer o desconectar.</p>
+        <h3>Brillo regulable</h3>
+        <p>Elige la intensidad: suave para dormir, más viva para una noche de pelis o para tu setup.</p>
       </article>
       <article class="tarjeta aparece" data-tilt>
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg></div>
@@ -577,13 +594,26 @@ body.sin-scroll{overflow:hidden}
   <div class="contenedor">
     <div class="centrado aparece">
       <span class="antetitulo">Hecho para</span>
-      <h2>Una luz, cuatro planes</h2>
+      <h2>Un proyector, mil planes</h2>
     </div>
     <div class="para-quien">
       <div class="perfil aparece"><div class="emoji">🧸</div><div><h3>La hora de dormir de los peques</h3><p>Un ritual que les encanta: apagar la luz para ver las estrellas, en vez de pelear por dejarla encendida.</p></div></div>
       <div class="perfil aparece"><div class="emoji">💜</div><div><h3>Noches en pareja</h3><p>Una peli, una cena en casa o simplemente hablar bajo un cielo de auroras.</p></div></div>
       <div class="perfil aparece"><div class="emoji">🎮</div><div><h3>Gaming y setup</h3><p>Dale a tu cuarto o a tu streaming un ambiente que se ve en cámara.</p></div></div>
       <div class="perfil aparece"><div class="emoji">🧘</div><div><h3>Relax y desconexión</h3><p>Deja el móvil, pon el cielo y respira. Tu rato de calma antes de dormir.</p></div></div>
+      <div class="perfil aparece"><div class="emoji">🚗</div><div><h3>El techo de tu coche</h3><p>Enchúfalo al USB del coche y convierte el interior en un cielo estrellado. Solo con el coche parado.</p></div></div>
+      <div class="perfil aparece"><div class="emoji">⛺</div><div><h3>Viajes y acampada</h3><p>Compacto y ligero. Con una batería externa, tu cielo va contigo al hotel o a la tienda de campaña.</p></div></div>
+    </div>
+    <!-- Fuentes de alimentación compatibles -->
+    <div class="fuentes aparece">
+      <h3>Funciona con lo que ya tienes</h3>
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>Portátil</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="6" y="3" width="12" height="18" rx="2.5"/><path d="M10 7h4"/></svg>Batería externa</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="6" y="8" width="12" height="12" rx="2"/><path d="M10 8V3M14 8V3"/></svg>Cargador de pared</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 3h6v4l2 3v9a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-9l2-3z"/></svg>Cargador de coche</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="2"/><circle cx="12" cy="15" r="2.5"/><path d="M10 6h4"/></svg>PC de sobremesa</li>
+      </ul>
     </div>
   </div>
 </section>
@@ -607,6 +637,40 @@ body.sin-scroll{overflow:hidden}
       <div class="paso aparece"><span class="numero">3</span>
         <svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M10 40c0-12 8-12 8-22"/><path d="M18 18l14-10M22 22l16-6M24 28l16 0"/></svg>
         <h3>Apunta y disfruta</h3><p>Dobla el brazo hacia el techo, toca para encender y ajusta el brillo.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     SECCIÓN 7b · FICHA TÉCNICA Y CONTENIDO DE LA CAJA (datos del fabricante)
+     ===================================================================== -->
+<section class="seccion" id="ficha">
+  <div class="contenedor">
+    <div class="centrado aparece">
+      <span class="antetitulo">Sin letra pequeña</span>
+      <h2>Ficha técnica</h2>
+    </div>
+    <div class="ficha">
+      <div class="ficha-bloque aparece">
+        <h3>Características</h3>
+        <dl>
+          <dt>Alimentación</dt><dd>USB 5 V</dd>
+          <dt>Material</dt><dd>Plástico ABS</dd>
+          <dt>Brillo</dt><dd>Regulable</dd>
+          <dt>Control</dt><dd>Táctil</dd>
+          <dt>Discos</dt><dd>5, 15 o 20 según el kit</dd>
+          <dt>Temas</dt><dd>Galaxias, auroras, Navidad y más</dd>
+        </dl>
+      </div>
+      <div class="ficha-bloque aparece">
+        <h3>Qué hay en la caja</h3>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5 9-10"/></svg><span><b>1 proyector</b> de estrellas</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5 9-10"/></svg><span><b>1 cable USB</b></span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l5 5 9-10"/></svg><span><b>5, 15 o 20 discos</b> de proyección, según el kit</span></li>
+        </ul>
+        <p class="intro" style="font-size:.88rem;margin:14px 0 0">No incluye adaptador de enchufe: usa el cargador USB de tu móvil.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -673,9 +737,11 @@ body.sin-scroll{overflow:hidden}
     </div>
     <div class="faq">
       <div class="faq-item aparece"><h3><button class="faq-btn" aria-expanded="false">¿Cómo se alimenta? ¿Lleva pilas?<span class="mas"></span></button></h3>
-        <div class="faq-panel"><div><p>Funciona por USB a 5 V, sin pilas. Puedes conectarlo al cargador del móvil, al ordenador o a una batería externa. <span class="placeholder">[CONFIRMA SI INCLUYE ADAPTADOR DE ENCHUFE]</span></p></div></div></div>
+        <div class="faq-panel"><div><p>Funciona por USB a 5 V, sin pilas. Incluye el cable USB, pero no el adaptador de enchufe: conéctalo al cargador del móvil, al ordenador, al USB del coche o a una batería externa.</p></div></div></div>
       <div class="faq-item aparece"><h3><button class="faq-btn" aria-expanded="false">¿Qué diferencia hay entre los kits?<span class="mas"></span></button></h3>
         <div class="faq-panel"><div><p>El proyector es el mismo. Cambia el número de discos que incluye: 5, 15 o 20 cielos distintos.</p></div></div></div>
+      <div class="faq-item aparece"><h3><button class="faq-btn" aria-expanded="false">¿Sirve para el coche?<span class="mas"></span></button></h3>
+        <div class="faq-panel"><div><p>Sí, se conecta a cualquier puerto USB del coche. Úsalo solo con el coche parado, para no distraer al conductor.</p></div></div></div>
       <div class="faq-item aparece"><h3><button class="faq-btn" aria-expanded="false">¿Qué tamaño tiene la proyección?<span class="mas"></span></button></h3>
         <div class="faq-panel"><div><p>Depende de la distancia al techo o a la pared: cuanto más lejos, más grande. <span class="placeholder">[TAMAÑO / DISTANCIA RECOMENDADA SEGÚN EL FABRICANTE]</span></p></div></div></div>
       <div class="faq-item aparece"><h3><button class="faq-btn" aria-expanded="false">¿Se puede dejar encendido toda la noche?<span class="mas"></span></button></h3>
@@ -828,13 +894,14 @@ var CONFIG = {
     aurora:   { nombre:'Aurora boreal',  nebulosas:['#10b981','#22d3ee','#6366f1'],           fondo:['#03122a','#010510'], estrellas:.8, aurora:true },
     oceano:   { nombre:'Fondo del mar',  nebulosas:['#0891b2','#2563eb','#14b8a6'],           fondo:['#021a33','#000814'], estrellas:.35, olas:true },
     luna:     { nombre:'Luna y estrellas', nebulosas:['#4338ca','#1e3a8a'],                   fondo:['#070a24','#01020a'], estrellas:1.3, luna:true },
-    nebulosa: { nombre:'Nebulosa rosa',  nebulosas:['#f472b6','#a855f7','#fb7185','#8b5cf6'], fondo:['#1a0526','#05010c'], estrellas:.9 }
+    nebulosa: { nombre:'Nebulosa rosa',  nebulosas:['#f472b6','#a855f7','#fb7185','#8b5cf6'], fondo:['#1a0526','#05010c'], estrellas:.9 },
+    navidad:  { nombre:'Navidad',        nebulosas:['#dc2626','#16a34a','#f59e0b','#b91c1c'], fondo:['#14060a','#030104'], estrellas:.7, nieve:true }
   };
 
   function Cielo(canvas, tema){
     var ctx = canvas.getContext('2d');
     var w=0, h=0, dpr=Math.min(window.devicePixelRatio||1, 2);
-    var estrellas=[], blobs=[], fugaces=[], t=0, visible=true, actual=TEMAS[tema], mezcla=1, anterior=null;
+    var estrellas=[], blobs=[], fugaces=[], copos=[], t=0, visible=true, actual=TEMAS[tema], mezcla=1, anterior=null;
     function medir(){
       var r = canvas.getBoundingClientRect(); w = r.width; h = r.height;
       canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
@@ -844,6 +911,7 @@ var CONFIG = {
       var n = Math.round(w*h/2600 * actual.estrellas);
       estrellas = [];
       for (var i=0;i<n;i++) estrellas.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()<.92?Math.random()*1.1+.2:Math.random()*1.8+1,f:Math.random()*6.28,v:.5+Math.random()*2});
+      copos = []; for (var j=0;j<Math.round(w*h/9000);j++) copos.push({x:Math.random()*w,y:Math.random()*h,r:1+Math.random()*2.2,v:.4+Math.random()*.9,f:Math.random()*6.28});
       blobs = actual.nebulosas.map(function(c,i){ return {c:c,x:Math.random(),y:Math.random()*.8,r:.35+Math.random()*.35,vx:(Math.random()-.5)*.012,vy:(Math.random()-.5)*.008,f:i*1.7} });
     }
     function rgba(hex,a){ var n=parseInt(hex.slice(1),16); return 'rgba('+(n>>16)+','+(n>>8&255)+','+(n&255)+','+a+')' }
@@ -893,6 +961,15 @@ var CONFIG = {
         [[-.3,-.1,.18],[.25,.2,.12],[.05,.4,.09],[.35,-.35,.08]].forEach(function(c){ ctx.beginPath(); ctx.arc(lx+c[0]*lr,ly+c[1]*lr,c[2]*lr,0,6.283); ctx.fill() });
         ctx.globalCompositeOperation='lighter';
       }
+      // Nieve (tema Navidad)
+      if (actual.nieve){
+        ctx.fillStyle='rgba(255,255,255,.75)';
+        for (var c2=0;c2<copos.length;c2++){
+          var cp = copos[c2]; cp.y += cp.v*dt*40; cp.x += Math.sin(t+cp.f)*dt*12;
+          if (cp.y > h) { cp.y = -5; cp.x = Math.random()*w; }
+          ctx.beginPath(); ctx.arc(cp.x,cp.y,cp.r,0,6.283); ctx.fill();
+        }
+      }
       // Estrellas que titilan
       for (var i=0;i<estrellas.length;i++){
         var s = estrellas[i], a = .45 + .55*Math.sin(t*s.v + s.f);
@@ -932,7 +1009,7 @@ var CONFIG = {
 
   /* Botones de discos de la demo */
   var discos = $('#discos');
-  var muestras = {galaxia:'radial-gradient(circle at 35% 35%,#db2777,#7c3aed 45%,#0a0630)',aurora:'linear-gradient(160deg,#34d399,#22d3ee 50%,#03122a)',oceano:'radial-gradient(circle at 50% 30%,#22d3ee,#0369a1 55%,#021a33)',luna:'radial-gradient(circle at 60% 40%,#f5f5ff 0 22%,#1e1b4b 24%)',nebulosa:'radial-gradient(circle at 40% 40%,#f472b6,#a855f7 50%,#1a0526)'};
+  var muestras = {galaxia:'radial-gradient(circle at 35% 35%,#db2777,#7c3aed 45%,#0a0630)',aurora:'linear-gradient(160deg,#34d399,#22d3ee 50%,#03122a)',oceano:'radial-gradient(circle at 50% 30%,#22d3ee,#0369a1 55%,#021a33)',luna:'radial-gradient(circle at 60% 40%,#f5f5ff 0 22%,#1e1b4b 24%)',nebulosa:'radial-gradient(circle at 40% 40%,#f472b6,#a855f7 50%,#1a0526)',navidad:'radial-gradient(circle at 40% 40%,#f59e0b,#dc2626 45%,#14532d)'};
   Object.keys(TEMAS).forEach(function(k, i){
     var b = document.createElement('button'); b.type='button'; b.className='disco'; b.setAttribute('aria-pressed', i===0);
     b.innerHTML = '<span class="muestra" style="background:'+muestras[k]+'"></span>'+TEMAS[k].nombre;
@@ -944,7 +1021,7 @@ var CONFIG = {
   });
   // El hero cambia de cielo solo cada pocos segundos
   if (!reduceMotion){
-    var ciclo = ['galaxia','nebulosa','aurora','luna'], ic = 0;
+    var ciclo = ['galaxia','navidad','aurora','nebulosa','luna'], ic = 0;
     setInterval(function(){ ic = (ic+1)%ciclo.length; cieloHero.tema(ciclo[ic]) }, 7000);
   }
 
